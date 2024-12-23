@@ -18,8 +18,10 @@
 
 #include "AGX_Simulation.generated.h"
 
+class UAGX_Ext_AddedMassInteractionComponent;
 class AAGX_Stepper;
 class AAGX_Terrain;
+class UAGX_Ext_AddedMassInteractionComponent;
 class UAGX_ConstraintComponent;
 class UAGX_ContactMaterial;
 class UAGX_RigidBodyComponent;
@@ -469,7 +471,8 @@ public: // Member functions.
 	void Add(AAGX_Terrain& Terrain);
 	void Add(UAGX_TireComponent& Tire);
 	void Add(UAGX_WireComponent& Wire);
-
+	void Add(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction);
+	
 	void Remove(UAGX_ConstraintComponent& Constraint);
 	void Remove(UAGX_RigidBodyComponent& Body);
 	void Remove(UAGX_ShapeComponent& Shape);
@@ -478,7 +481,8 @@ public: // Member functions.
 	void Remove(AAGX_Terrain& Terrain);
 	void Remove(UAGX_TireComponent& Tire);
 	void Remove(UAGX_WireComponent& Wire);
-
+	void Remove(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction);
+	
 	void Register(UAGX_ContactMaterial& Material);
 	void Unregister(UAGX_ContactMaterial& Material);
 

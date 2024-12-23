@@ -13,6 +13,7 @@
 #include "AMOR/AGX_ShapeContactMergeSplitThresholds.h"
 #include "AMOR/AGX_WireMergeSplitThresholds.h"
 #include "Constraints/AGX_ConstraintComponent.h"
+#include "Interaction/AGX_Ext_AddedMassInteractionComponent.h"
 #include "Contacts/ContactListenerBarrier.h"
 #include "Materials/AGX_ContactMaterial.h"
 #include "Materials/AGX_ShapeMaterial.h"
@@ -333,6 +334,12 @@ void UAGX_Simulation::Add(UAGX_WireComponent& Wire)
 	AGX_Simulation_helpers::Add(*this, Wire);
 }
 
+void UAGX_Simulation::Add(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction)
+{
+	EnsureStepperCreated();
+	AGX_Simulation_helpers::Add(*this, AddedMassInteraction);
+}
+
 void UAGX_Simulation::Remove(UAGX_ConstraintComponent& Constraint)
 {
 	AGX_Simulation_helpers::Remove(*this, Constraint);
@@ -435,6 +442,11 @@ void UAGX_Simulation::Remove(UAGX_TireComponent& Tire)
 void UAGX_Simulation::Remove(UAGX_WireComponent& Wire)
 {
 	AGX_Simulation_helpers::Remove(*this, Wire);
+}
+
+void UAGX_Simulation::Remove(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction)
+{
+	AGX_Simulation_helpers::Remove(*this, AddedMassInteraction);
 }
 
 void UAGX_Simulation::Register(UAGX_ContactMaterial& Material)

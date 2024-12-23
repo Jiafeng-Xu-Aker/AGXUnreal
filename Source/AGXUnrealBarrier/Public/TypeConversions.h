@@ -13,6 +13,7 @@
 #include "Constraints/AGX_Constraint2DOFFreeDOF.h"
 #include "Contacts/AGX_ContactEnums.h"
 #include "Materials/AGX_ContactMaterialEnums.h"
+#include "Model/Ext_WindAndWaterParametersEnums.h"
 #include "RigidBodyBarrier.h"
 #include "Sensors/AGX_CustomPatternInterval.h"
 #include "Sensors/AGX_LidarEnums.h"
@@ -46,6 +47,7 @@
 #include <agx/Vec3.h>
 #include <agxCollide/Contacts.h>
 #include <agxModel/TwoBodyTire.h>
+#include <agxModel/WindAndWaterParameters.h>
 #include <agxSensor/LidarModelOusterOS.h>
 #include <agxSensor/LidarRayAngleGaussianNoise.h>
 #include <agxSensor/LidarRayPatternGenerator.h>
@@ -1438,6 +1440,75 @@ inline agxVehicle::TrackWheel::Model Convert(EAGX_TrackWheelModel Model)
 					 "literal to an agxVehicle::TrackWheel::Model."));
 			return agxVehicle::TrackWheel::IDLER;
 	}
+}
+//
+// Enumerations, WindAndWater.
+//
+
+inline agxModel::WindAndWaterParameters::Coefficient Convert(EAGX_Ext_WindAndWaterParametersCoefficient Coefficient)
+{
+    switch (Coefficient)
+    {
+    case EAGX_Ext_WindAndWaterParametersCoefficient::PRESSURE_DRAG:
+        return agxModel::WindAndWaterParameters::Coefficient::PRESSURE_DRAG;
+    case EAGX_Ext_WindAndWaterParametersCoefficient::VISCOUS_DRAG:
+        return agxModel::WindAndWaterParameters::Coefficient::VISCOUS_DRAG;
+    case EAGX_Ext_WindAndWaterParametersCoefficient::LIFT:
+        return agxModel::WindAndWaterParameters::Coefficient::LIFT;
+    case EAGX_Ext_WindAndWaterParametersCoefficient::BUOYANCY:
+        return agxModel::WindAndWaterParameters::Coefficient::BUOYANCY;
+    default:
+        UE_LOG(
+            LogAGX, Error,
+            TEXT("Conversion failed: Tried to convert an EAGX_Ext_WindAndWaterParametersCoefficient "
+                "literal of unknown type to an agxModel::WindAndWaterParameters::Coefficient "
+                "literal. Returning agxModel::WindAndWaterParameters::Coefficient::PRESSURE_DRAG."));
+        return agxModel::WindAndWaterParameters::Coefficient::PRESSURE_DRAG;
+    }
+}
+
+inline agxModel::WindAndWaterParameters::ShapeTessellation Convert(EAGX_Ext_WindAndWaterShapeTessellation ShapeTessellation)
+{
+    switch (ShapeTessellation)
+    {
+    case EAGX_Ext_WindAndWaterShapeTessellation::LOW:
+        return agxModel::WindAndWaterParameters::ShapeTessellation::LOW;
+    case EAGX_Ext_WindAndWaterShapeTessellation::MEDIUM:
+        return agxModel::WindAndWaterParameters::ShapeTessellation::MEDIUM;
+    case EAGX_Ext_WindAndWaterShapeTessellation::HIGH:
+        return agxModel::WindAndWaterParameters::ShapeTessellation::HIGH;
+    case EAGX_Ext_WindAndWaterShapeTessellation::ULTRA_HIGH:
+        return agxModel::WindAndWaterParameters::ShapeTessellation::ULTRA_HIGH;
+    default:
+        UE_LOG(
+            LogAGX, Error,
+            TEXT("Conversion failed: Tried to convert an EAGX_Ext_WindAnWaterShapeTessellation "
+                "literal of unknown type to an agxModel::WindAndWaterParameters::ShapeTessellation "
+                "literal. Returning agxModel::WindAndWaterParameters::ShapeTessellation::DEFAULT_TESSELLATION."));
+        return agxModel::WindAndWaterParameters::ShapeTessellation::DEFAULT_TESSELLATION;
+    }
+}
+
+inline EAGX_Ext_WindAndWaterParametersCoefficient Convert(agxModel::WindAndWaterParameters::Coefficient Coefficient)
+{
+    switch (Coefficient)
+    {
+    case agxModel::WindAndWaterParameters::Coefficient::PRESSURE_DRAG:
+        return EAGX_Ext_WindAndWaterParametersCoefficient::PRESSURE_DRAG;
+    case agxModel::WindAndWaterParameters::Coefficient::VISCOUS_DRAG:
+        return EAGX_Ext_WindAndWaterParametersCoefficient::VISCOUS_DRAG;
+    case agxModel::WindAndWaterParameters::Coefficient::LIFT:
+        return EAGX_Ext_WindAndWaterParametersCoefficient::LIFT;
+    case agxModel::WindAndWaterParameters::Coefficient::BUOYANCY:
+        return EAGX_Ext_WindAndWaterParametersCoefficient::BUOYANCY;
+    default:
+        UE_LOG(
+            LogAGX, Error,
+            TEXT("Conversion failed: Tried to convert an agxModel::WindAndWaterParameters::Coefficient "
+                "literal of unknown type to an EAGX_Ext_WindAndWaterParametersCoefficient "
+                "literal. Returning EAGX_Ext_WindAndWaterParametersCoefficient::PressureDrag."));
+        return EAGX_Ext_WindAndWaterParametersCoefficient::PRESSURE_DRAG;
+    }
 }
 
 inline EAGX_MergedTrackNodeContactReduction Convert(

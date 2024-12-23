@@ -110,6 +110,24 @@ FVector FRigidBodyBarrier::GetVelocity() const
 	return VelocityUnreal;
 }
 
+FVector FRigidBodyBarrier::GetLocalVelocity() const
+{
+	check(HasNative());
+	agx::Vec3 VelocityAGX = NativeRef->Native->getVelocity();
+	agx::Quat RotationAGX = NativeRef->Native->getRotation();
+	FVector VelocityUnreal = ConvertDisplacement(RotationAGX.inverse() * VelocityAGX);
+	return VelocityUnreal;
+}
+
+FVector FRigidBodyBarrier::GetLocalAngularVelocity() const
+{
+	check(HasNative());
+	agx::Vec3 AngularVelocityAGX = NativeRef->Native->getAngularVelocity();
+	agx::Quat RotationAGX = NativeRef->Native->getRotation();
+	FVector AngularVelocityUnreal = ConvertAngularVelocity(RotationAGX.inverse() * AngularVelocityAGX);
+	return AngularVelocityUnreal;
+}
+
 void FRigidBodyBarrier::SetAngularVelocity(const FVector& AngularVelocityUnreal)
 {
 	check(HasNative());

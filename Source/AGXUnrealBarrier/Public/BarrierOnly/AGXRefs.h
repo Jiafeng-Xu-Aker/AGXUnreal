@@ -14,6 +14,8 @@
 #include <agxCollide/Geometry.h>
 #include <agxCollide/Shape.h>
 #include <agxModel/Tire.h>
+#include <agxModel/WindAndWaterController.h>
+#include <agxModel/WindAndWaterParameters.h>
 #include <agxPlot/DataSeries.h>
 #include <agxPlot/System.h>
 #include <agxPlot/WebPlot.h>
@@ -252,6 +254,54 @@ struct FTireRef
 
 	FTireRef() = default;
 	FTireRef(agxModel::Tire* InNative)
+		: Native(InNative)
+	{
+	}
+};
+
+struct FExt_WindAndWaterControllerRef
+{
+	agxModel::WindAndWaterControllerRef Native;
+
+	FExt_WindAndWaterControllerRef() = default;
+
+	FExt_WindAndWaterControllerRef(agxModel::WindAndWaterController* InNative)
+		: Native(InNative)
+	{
+	}
+};
+
+struct FExt_WindAndWaterParametersRef
+{
+	agxModel::WindAndWaterParametersRef Native;
+
+	FExt_WindAndWaterParametersRef() = default;
+
+	FExt_WindAndWaterParametersRef(agxModel::WindAndWaterParameters* InNative)
+		: Native(InNative)
+	{
+	}
+};
+
+struct FExt_DynamicWaterRef
+{
+	agxModel::WaterWrapperRef NativeWaterWrapper;
+	agxModel::WindAndWaterController::WaterFlowGeneratorRef NativeWaterFlowGenerator;
+
+	FExt_DynamicWaterRef() = default;
+	FExt_DynamicWaterRef(agxModel::WaterWrapper* InWrapper, agxModel::WindAndWaterController::WaterFlowGenerator* InNativeGenerator)
+		: NativeWaterWrapper(InWrapper),
+		  NativeWaterFlowGenerator(InNativeGenerator)
+	{
+	}
+};
+
+struct FExt_AddedMassInteractionRef
+{
+	agx::AddedMassInteractionRef Native;
+
+	FExt_AddedMassInteractionRef() = default;
+	FExt_AddedMassInteractionRef(agx::AddedMassInteraction* InNative)
 		: Native(InNative)
 	{
 	}

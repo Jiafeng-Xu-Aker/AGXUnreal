@@ -8,8 +8,10 @@
 #include "BarrierOnly/AGXRefs.h"
 #include "BarrierOnly/Wire/WireRef.h"
 #include "Constraints/ConstraintBarrier.h"
+#include "Interaction/Ext_AddedMassInteractionBarrier.h"
 #include "Materials/ContactMaterialBarrier.h"
 #include "Materials/ShapeMaterialBarrier.h"
+#include "Model/Ext_WindAndWaterControllerBarrier.h"
 #include "RigidBodyBarrier.h"
 #include "Shapes/ShapeBarrier.h"
 #include "Terrain/TerrainBarrier.h"
@@ -57,12 +59,27 @@ bool FSimulationBarrier::Add(FContactMaterialBarrier& ContactMaterial)
 	return NativeRef->Native->add(ContactMaterial.GetNative()->Native);
 }
 
+bool FSimulationBarrier::Add(FExt_WindAndWaterControllerBarrier& WindAnWaterController)
+{
+	check(HasNative());
+	check(WindAnWaterController.HasNative());
+	return NativeRef->Native->add(WindAnWaterController.GetNative()->Native);
+}
+
+bool FSimulationBarrier::Add(FExt_AddedMassInteractionBarrier& AddedMassInteractionbarrier)
+{
+	check(HasNative());
+	check(AddedMassInteractionbarrier.HasNative());
+	return NativeRef->Native->add(AddedMassInteractionbarrier.GetNative()->Native);
+}
+
 bool FSimulationBarrier::Add(FRigidBodyBarrier& Body)
 {
 	check(HasNative());
 	check(Body.HasNative());
 	return NativeRef->Native->add(Body.GetNative()->Native, /*addGeometries*/ false);
 }
+
 
 bool FSimulationBarrier::Add(FShapeBarrier& Shape)
 {
@@ -118,6 +135,20 @@ bool FSimulationBarrier::Remove(FContactMaterialBarrier& ContactMaterial)
 	check(HasNative());
 	check(ContactMaterial.HasNative());
 	return NativeRef->Native->remove(ContactMaterial.GetNative()->Native);
+}
+
+bool FSimulationBarrier::Remove(FExt_WindAndWaterControllerBarrier& WindAnWaterController)
+{
+	check(HasNative());
+	check(WindAnWaterController.HasNative());
+	return NativeRef->Native->remove(WindAnWaterController.GetNative()->Native);
+}
+
+bool FSimulationBarrier::Remove(FExt_AddedMassInteractionBarrier& AddedMassInteraction)
+{
+	check(HasNative());
+	check(AddedMassInteraction.HasNative());
+	return NativeRef->Native->remove(AddedMassInteraction.GetNative()->Native);
 }
 
 bool FSimulationBarrier::Remove(FRigidBodyBarrier& Body)

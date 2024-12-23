@@ -183,3 +183,8 @@ FTrackBarrier AGXBarrierFactories::CreateTrackBarrier(agxVehicle::Track* Track)
 {
 	return {std::make_unique<FTrackRef>(Track)};
 }
+
+FExt_WindAndWaterParametersBarrier AGXBarrierFactories::CreateWindAndWaterParametersBarrier(agxModel::WindAndWaterParameters* WindAndWaterParameters)
+{
+	return {std::make_unique<FExt_WindAndWaterParametersRef>(WindAndWaterParameters)};
+}

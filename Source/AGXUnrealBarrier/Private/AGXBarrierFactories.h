@@ -19,6 +19,7 @@
 #include "Materials/ContactMaterialBarrier.h"
 #include "Materials/ShapeMaterialBarrier.h"
 #include "Materials/TerrainMaterialBarrier.h"
+#include "Model/Ext_WindAndWaterParametersBarrier.h"
 #include "RigidBodyBarrier.h"
 #include "Sensors/RtAmbientMaterialBarrier.h"
 #include "Shapes/AnyShapeBarrier.h"
@@ -64,6 +65,7 @@ namespace agxCollide
 namespace agxModel
 {
 	class TwoBodyTire;
+	class WindAndWaterParameters;
 }
 
 namespace agxTerrain
@@ -155,6 +157,8 @@ namespace AGXBarrierFactories
 	FWireWinchBarrier CreateWireWinchBarrier(agxWire::WireWinchController* Winch);
 
 	FShovelBarrier CreateShovelBarrier(agxTerrain::Shovel* Shovel);
-
+	
+	FExt_WindAndWaterParametersBarrier CreateWindAndWaterParametersBarrier(agxModel::WindAndWaterParameters* WindAndWaterParameters);
+	
 	FTrackBarrier CreateTrackBarrier(agxVehicle::Track* Track);
 }

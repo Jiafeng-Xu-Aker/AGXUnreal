@@ -15,6 +15,8 @@
 // Standard library includes.
 #include <memory>
 
+class FExt_AddedMassInteractionBarrier;
+class FExt_WindAndWaterControllerBarrier;
 struct FSimulationRef;
 
 class FRigidBodyBarrier;
@@ -26,6 +28,8 @@ class FTerrainBarrier;
 class FTerrainPagerBarrier;
 class FTireBarrier;
 class FWireBarrier;
+class FExt_AddedMassInteractionBarrier;
+class FExt_WindAndWaterControllerBarrier;
 
 class AGXUNREALBARRIER_API FSimulationBarrier
 {
@@ -49,7 +53,8 @@ public:
 	bool Add(FTerrainPagerBarrier& Terrain);
 	bool Add(FTireBarrier& Tire);
 	bool Add(FWireBarrier& Wire);
-
+	bool Add(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
+	bool Add(FExt_AddedMassInteractionBarrier& AddedMassInteractionbarrier);
 	bool Remove(FConstraintBarrier& Constraint);
 	bool Remove(FContactMaterialBarrier& ContactMaterial);
 
@@ -64,7 +69,8 @@ public:
 	bool Remove(FTerrainPagerBarrier& Terrain);
 	bool Remove(FTireBarrier& Tire);
 	bool Remove(FWireBarrier& Wire);
-
+	bool Remove(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
+	bool Remove(FExt_AddedMassInteractionBarrier& AddedMassInteraction);
 	void SetEnableCollisionGroupPair(const FName& Group1, const FName& Group2, bool CanCollide);
 
 	static void SetEnableCollision(FRigidBodyBarrier& Body1, FRigidBodyBarrier& Body2, bool Enable);

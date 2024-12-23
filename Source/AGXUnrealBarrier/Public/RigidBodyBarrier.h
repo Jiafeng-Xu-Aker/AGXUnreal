@@ -54,13 +54,15 @@ public:
 
 	void SetVelocity(const FVector& Velocity);
 	FVector GetVelocity() const;
-
+	FVector GetLocalVelocity() const;
+	
 	// In degrees/s.
 	void SetAngularVelocity(const FVector& AngularVelocity);
 
 	// In degrees/s.
 	FVector GetAngularVelocity() const;
-
+	FVector GetLocalAngularVelocity() const;
+	
 	void SetLinearVelocityDamping(const FVector& LinearVelocityDamping);
 	FVector GetLinearVelocityDamping() const;
 
