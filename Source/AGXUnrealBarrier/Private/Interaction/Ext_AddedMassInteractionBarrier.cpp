@@ -70,13 +70,14 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody1Block(const TArray<double
 			{
 				Mat[i][j] = Block6x6[i * 6 + j];
 			}
-		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to rigid body 1 %hc."),
-		       *(NativeRef->Native->getRigidBody1()->getName().c_str()));
+		// FString RigidBodyName = NativeRef->Native->getRigidBody1()->getName().c_str(); 
+		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to rigid body 1 %hs."),
+		       NativeRef->Native->getRigidBody1()->getName().c_str());
 	}
 	else
 	{
-		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to %hc, rigid body 1 is invalid."),
-		       *(NativeRef->Native->getRigidBody1()->getName().c_str()));;
+		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to %hs, rigid body 1 is invalid."),
+		       NativeRef->Native->getRigidBody1()->getName().c_str());
 	}
 }
 
@@ -90,13 +91,13 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody2Block(const TArray<double
 			{
 				Mat[i][j] = Block6x6[i * 6 + j];
 			}
-		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to rigid body 2 %hc."),
-		       *(NativeRef->Native->getRigidBody2()->getName().c_str()));
+		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to rigid body 2 %hs."),
+		       NativeRef->Native->getRigidBody2()->getName().c_str());
 	}
 	else
 	{
-		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to %hc, rigid body 2 is invalid."),
-		       *(NativeRef->Native->getRigidBody2()->getName().c_str()));;
+		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to %hs, rigid body 2 is invalid."),
+		       NativeRef->Native->getRigidBody2()->getName().c_str());
 	}
 }
 
@@ -110,14 +111,14 @@ void FExt_AddedMassInteractionBarrier::AssignOffDiagonalBlock(const TArray<doubl
 			{
 				Mat[i][j] = Block6x6[i * 6 + j];
 			}
-		UE_LOG(LogAGX, Log, TEXT("Assign off-diagonal block added mass interaction between %hc and %hc"),
-		       *(NativeRef->Native->getRigidBody1()->getName().c_str()),
-		       *(NativeRef->Native->getRigidBody2()->getName().c_str()));
+		UE_LOG(LogAGX, Log, TEXT("Assign off-diagonal block added mass interaction between %hs and %hs"),
+		       NativeRef->Native->getRigidBody1()->getName().c_str(),
+		       NativeRef->Native->getRigidBody2()->getName().c_str());
 	}
 	else
 	{
-		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign off-diagonal block added mass interaction from %hc,"
-			       "on or both rigid bodies are invalid."), *(NativeRef->Native->getName().c_str()));;
+		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign off-diagonal block added mass interaction from %hs,"
+			       "on or both rigid bodies are invalid."), NativeRef->Native->getName().c_str());
 	}
 }
 
@@ -135,13 +136,13 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody1BlockAt(const TArray<doub
 		NativeRef->Native->translateWorldDiagonalBlock(CmOffset, Mat66);
 		NativeRef->Native->getRigidBody1Storage()->getBlock() = Mat66;
 
-		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to parent rigid body %hc."),
-		       *(NativeRef->Native->getRigidBody1()->getName().c_str()));
+		UE_LOG(LogAGX, Log, TEXT("Assign added mass block to parent rigid body %hs."),
+		       NativeRef->Native->getRigidBody1()->getName().c_str());
 	}
 	else
 	{
-		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to parent rigid body %hc"),
-		       *(NativeRef->Native->getRigidBody2()->getName().c_str()));;
+		UE_LOG(LogAGX, Warning, TEXT("Failed attempt to assign added mass block to parent rigid body %hs"),
+		       NativeRef->Native->getRigidBody2()->getName().c_str());
 	}
 }
 
