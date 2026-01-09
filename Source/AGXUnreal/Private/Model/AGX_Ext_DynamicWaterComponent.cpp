@@ -11,7 +11,7 @@
 
 namespace
 {
-	class CustomDynamicWaterBarrier : public FExt_DynamicWaterBarrier
+	class CustomDynamicWaterBarrier : public FDynamicWaterBarrier
 	{
 	public:
 		CustomDynamicWaterBarrier(const UAGX_Ext_DynamicWaterComponent& Owner) : Owner_(Owner)
@@ -47,7 +47,7 @@ UAGX_Ext_DynamicWaterComponent::UAGX_Ext_DynamicWaterComponent()
 	// ...
 }
 
-FExt_DynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetOrCreateNative()
+FDynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetOrCreateNative()
 {
 	if (!HasNative())
 	{
@@ -80,7 +80,7 @@ FExt_DynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetOrCreateNative()
 	return NativeBarrier.get();
 }
 
-FExt_DynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetNative()
+FDynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetNative()
 {
 	if (!HasNative())
 	{
@@ -89,7 +89,7 @@ FExt_DynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetNative()
 	return NativeBarrier.get();
 }
 
-const FExt_DynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetNative() const
+const FDynamicWaterBarrier* UAGX_Ext_DynamicWaterComponent::GetNative() const
 {
 	if (!HasNative())
 	{

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Materials/AGX_ShapeMaterial.h"
-#include "Model/Ext_WindAndWaterParametersEnums.h"
+#include "Model/WindAndWaterParametersEnums.h"
 #include "AGX_Ext_WindAndWaterAwareShapeMaterial.generated.h"
 
 class UAGX_Ext_WindAndWaterShapeRegistryComponent;
@@ -29,7 +29,7 @@ struct FAGX_Ext_WindAndWaterParameters
 	double Buoyancy_ = 1.0;
 	
 	UPROPERTY(EditAnywhere)
-	EAGX_Ext_WindAndWaterShapeTessellation ShapeTessellation_ = EAGX_Ext_WindAndWaterShapeTessellation::DEFAULT_TESSELLATION;
+	EAGX_WindAndWaterShapeTessellation ShapeTessellation_ = EAGX_WindAndWaterShapeTessellation::DEFAULT_TESSELLATION;
 };
 
 UCLASS(ClassGroup = "AGX", Category = "AGX", BlueprintType, Blueprintable,

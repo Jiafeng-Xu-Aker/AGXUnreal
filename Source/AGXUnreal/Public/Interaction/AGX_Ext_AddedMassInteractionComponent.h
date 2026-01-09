@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AGX_NativeOwner.h"
 #include "Components/SceneComponent.h"
-#include "Interaction/Ext_AddedMassInteractionBarrier.h"
+#include "Interaction/AddedMassInteractionBarrier.h"
 #include "AGX_Ext_AddedMassInteractionComponent.generated.h"
 
 class UAGX_RigidBodyComponent;
@@ -33,12 +33,12 @@ class AGXUNREAL_API UAGX_Ext_AddedMassInteractionComponent : public USceneCompon
 
 public:
 	/// Get the native AGX Dynamics representation of this added mass. Create it if necessary.
-	FExt_AddedMassInteractionBarrier* GetOrCreateNative();
+	FAddedMassInteractionBarrier* GetOrCreateNative();
 
 	/// Return the native AGX Dynamics representation of this added mass. May return nullptr.
-	FExt_AddedMassInteractionBarrier* GetNative();
+	FAddedMassInteractionBarrier* GetNative();
 
-	const FExt_AddedMassInteractionBarrier* GetNative() const;
+	const FAddedMassInteractionBarrier* GetNative() const;
 
 	// ~Begin IAGX_NativeOwner interface.
 	virtual bool HasNative() const override;
@@ -72,5 +72,5 @@ public:
 	bool bIsEnabled;
 
 protected:
-	FExt_AddedMassInteractionBarrier NativeBarrier;
+	FAddedMassInteractionBarrier NativeBarrier;
 };

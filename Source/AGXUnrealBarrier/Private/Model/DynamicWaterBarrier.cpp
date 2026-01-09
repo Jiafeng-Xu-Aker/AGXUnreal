@@ -1,4 +1,4 @@
-﻿#include "Model/Ext_DynamicWaterBarrier.h"
+﻿#include "Model/DynamicWaterBarrier.h"
 
 #include <agxModel/WindAndWaterController.h>
 
@@ -10,7 +10,7 @@ namespace
 	class CustomWaterWrapper : public agxModel::WaterWrapper
 	{
 	public:
-		CustomWaterWrapper(const FExt_DynamicWaterBarrier& Owner): Owner_(Owner)
+		CustomWaterWrapper(const FDynamicWaterBarrier& Owner): Owner_(Owner)
 		{
 		}
 
@@ -29,13 +29,13 @@ namespace
 			return ConvertVector(Owner_.GetVelocity(ConvertVector(worldPoint)));
 		}
 
-		const FExt_DynamicWaterBarrier& Owner_;
+		const FDynamicWaterBarrier& Owner_;
 	};
 
 	class CustomWaterFlowGenerator : public agxModel::WindAndWaterController::WaterFlowGenerator
 	{
 	public:
-		CustomWaterFlowGenerator(const FExt_DynamicWaterBarrier& Owner): Owner_(Owner)
+		CustomWaterFlowGenerator(const FDynamicWaterBarrier& Owner): Owner_(Owner)
 		{
 		}
 
@@ -44,60 +44,60 @@ namespace
 			return ConvertVector(Owner_.GetVelocity(ConvertVector(worldPoint)));
 		}
 
-		const FExt_DynamicWaterBarrier& Owner_;
+		const FDynamicWaterBarrier& Owner_;
 	};
 }
 
 
-FExt_DynamicWaterBarrier::FExt_DynamicWaterBarrier()
-	: NativeRef{new FExt_DynamicWaterRef}
+FDynamicWaterBarrier::FDynamicWaterBarrier()
+	: NativeRef{new FDynamicWaterRef}
 {
 }
 
-FExt_DynamicWaterBarrier::FExt_DynamicWaterBarrier(std::unique_ptr<FExt_DynamicWaterRef> Native)
+FDynamicWaterBarrier::FDynamicWaterBarrier(std::unique_ptr<FDynamicWaterRef> Native)
 	: NativeRef{std::move(Native)}
 {
 	check(NativeRef->NativeWaterWrapper->is<agxModel::WaterWrapper>());
 	check(NativeRef->NativeWaterFlowGenerator->is<agxModel::WindAndWaterController::WaterFlowGenerator>());
 }
 
-FExt_DynamicWaterBarrier::FExt_DynamicWaterBarrier(FExt_DynamicWaterBarrier&& Other) noexcept
+FDynamicWaterBarrier::FDynamicWaterBarrier(FDynamicWaterBarrier&& Other) noexcept
 	: NativeRef{std::move(Other.NativeRef)}
 {
-	Other.NativeRef.reset(new FExt_DynamicWaterRef);
+	Other.NativeRef.reset(new FDynamicWaterRef);
 }
 
-FExt_DynamicWaterBarrier::~FExt_DynamicWaterBarrier()
+FDynamicWaterBarrier::~FDynamicWaterBarrier()
 {
 	// Must provide a destructor implementation in the .cpp file because the
 	// std::unique_ptr NativeRef's destructor must be able to see the definition,
 	// not just the forward declaration, of FExt_WaterWrapperRef.
 }
 
-bool FExt_DynamicWaterBarrier::HasNative() const
+bool FDynamicWaterBarrier::HasNative() const
 {
 	return NativeRef->NativeWaterWrapper != nullptr || NativeRef->NativeWaterFlowGenerator != nullptr;
 }
 
-void FExt_DynamicWaterBarrier::AllocateNative()
+void FDynamicWaterBarrier::AllocateNative()
 {
 	check(!HasNative());
-	NativeRef.reset(new FExt_DynamicWaterRef(new CustomWaterWrapper(*this), new CustomWaterFlowGenerator(*this)));
+	NativeRef.reset(new FDynamicWaterRef(new CustomWaterWrapper(*this), new CustomWaterFlowGenerator(*this)));
 }
 
-FExt_DynamicWaterRef* FExt_DynamicWaterBarrier::GetNative()
+FDynamicWaterRef* FDynamicWaterBarrier::GetNative()
 {
 	check(HasNative());
 	return NativeRef.get();
 }
 
-const FExt_DynamicWaterRef* FExt_DynamicWaterBarrier::GetNative() const
+const FDynamicWaterRef* FDynamicWaterBarrier::GetNative() const
 {
 	check(HasNative());
 	return NativeRef.get();
 }
 
-uintptr_t FExt_DynamicWaterBarrier::GetNativeAddress() const
+uintptr_t FDynamicWaterBarrier::GetNativeAddress() const
 {
 	if (!HasNative())
 	{
@@ -107,7 +107,7 @@ uintptr_t FExt_DynamicWaterBarrier::GetNativeAddress() const
 	return reinterpret_cast<uintptr_t>(NativeRef->NativeWaterWrapper.get());
 }
 
-void FExt_DynamicWaterBarrier::SetNativeAddress(uintptr_t NativeAddress)
+void FDynamicWaterBarrier::SetNativeAddress(uintptr_t NativeAddress)
 {
 	if (NativeAddress == GetNativeAddress())
 	{
@@ -121,16 +121,16 @@ void FExt_DynamicWaterBarrier::SetNativeAddress(uintptr_t NativeAddress)
 
 	if (NativeAddress == 0)
 	{
-		NativeRef.reset(new FExt_DynamicWaterRef(nullptr, nullptr));
+		NativeRef.reset(new FDynamicWaterRef(nullptr, nullptr));
 		return;
 	}
 	
-	NativeRef.reset(new FExt_DynamicWaterRef(
+	NativeRef.reset(new FDynamicWaterRef(
 		reinterpret_cast<agxModel::WaterWrapper*>(NativeAddress),
 		nullptr));
 }
 
-void FExt_DynamicWaterBarrier::ReleaseNative()
+void FDynamicWaterBarrier::ReleaseNative()
 {
-	NativeRef.reset(new FExt_DynamicWaterRef(nullptr, nullptr));
+	NativeRef.reset(new FDynamicWaterRef(nullptr, nullptr));
 }

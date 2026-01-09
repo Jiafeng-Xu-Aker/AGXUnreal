@@ -2,7 +2,7 @@
 #pragma once
 
 UENUM(BlueprintType)
-enum class EAGX_Ext_WindAndWaterParametersCoefficient : uint8
+enum class EAGX_WindAndWaterParametersCoefficient : uint8
 {
 	PRESSURE_DRAG,	
 	VISCOUS_DRAG,	
@@ -15,7 +15,7 @@ enum class EAGX_Ext_WindAndWaterParametersCoefficient : uint8
  * that are associated with hydro collision in the context of WindAndWaterController.
  */
 UENUM(BlueprintType)
-enum class EAGX_Ext_WindAndWaterShapeTessellation : uint8
+enum class EAGX_WindAndWaterShapeTessellation : uint8
 {
 	LOW,
 	MEDIUM,

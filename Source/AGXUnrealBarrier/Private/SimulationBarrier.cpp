@@ -11,10 +11,10 @@
 #include "BarrierOnly/Vehicle/TrackRef.h"
 #include "BarrierOnly/Wire/WireRef.h"
 #include "Constraints/ConstraintBarrier.h"
-#include "Interaction/Ext_AddedMassInteractionBarrier.h"
+#include "Interaction/AddedMassInteractionBarrier.h"
 #include "Materials/ContactMaterialBarrier.h"
 #include "Materials/ShapeMaterialBarrier.h"
-#include "Model/Ext_WindAndWaterControllerBarrier.h"
+#include "Model/WindAndWaterControllerBarrier.h"
 #include "ObserverFrameBarrier.h"
 #include "RigidBodyBarrier.h"
 #include "Shapes/ShapeBarrier.h"
@@ -77,7 +77,7 @@ bool FSimulationBarrier::Add(FContactMaterialBarrier& ContactMaterial)
 	return NativeRef->Native->add(ContactMaterial.GetNative()->Native);
 }
 
-bool FSimulationBarrier::Add(FExt_WindAndWaterControllerBarrier& WindAnWaterController)
+bool FSimulationBarrier::Add(FWindAndWaterControllerBarrier& WindAnWaterController)
 {
 	check(HasNative());
 	check(WindAnWaterController.HasNative());
@@ -90,7 +90,7 @@ bool FSimulationBarrier::Add(FObserverFrameBarrier& Frame)
 	return NativeRef->Native->add(Frame.GetNative()->Native);
 }
 
-bool FSimulationBarrier::Add(FExt_AddedMassInteractionBarrier& AddedMassInteractionbarrier)
+bool FSimulationBarrier::Add(FAddedMassInteractionBarrier& AddedMassInteractionbarrier)
 {
 	check(HasNative());
 	check(AddedMassInteractionbarrier.HasNative());
@@ -182,14 +182,14 @@ bool FSimulationBarrier::Remove(FContactMaterialBarrier& ContactMaterial)
 	return NativeRef->Native->remove(ContactMaterial.GetNative()->Native);
 }
 
-bool FSimulationBarrier::Remove(FExt_WindAndWaterControllerBarrier& WindAnWaterController)
+bool FSimulationBarrier::Remove(FWindAndWaterControllerBarrier& WindAnWaterController)
 {
 	check(HasNative());
 	check(WindAnWaterController.HasNative());
 	return NativeRef->Native->remove(WindAnWaterController.GetNative()->Native);
 }
 
-bool FSimulationBarrier::Remove(FExt_AddedMassInteractionBarrier& AddedMassInteraction)
+bool FSimulationBarrier::Remove(FAddedMassInteractionBarrier& AddedMassInteraction)
 {
 	check(HasNative());
 	check(AddedMassInteraction.HasNative());

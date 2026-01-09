@@ -294,13 +294,13 @@ struct FTireRef
 	}
 };
 
-struct FExt_WindAndWaterControllerRef
+struct FWindAndWaterControllerRef
 {
 	agxModel::WindAndWaterControllerRef Native;
 
-	FExt_WindAndWaterControllerRef() = default;
+	FWindAndWaterControllerRef() = default;
 
-	FExt_WindAndWaterControllerRef(agxModel::WindAndWaterController* InNative)
+	FWindAndWaterControllerRef(agxModel::WindAndWaterController* InNative)
 		: Native(InNative)
 	{
 	}
@@ -318,25 +318,25 @@ struct FExt_WindAndWaterParametersRef
 	}
 };
 
-struct FExt_DynamicWaterRef
+struct FDynamicWaterRef
 {
 	agxModel::WaterWrapperRef NativeWaterWrapper;
 	agxModel::WindAndWaterController::WaterFlowGeneratorRef NativeWaterFlowGenerator;
 
-	FExt_DynamicWaterRef() = default;
-	FExt_DynamicWaterRef(agxModel::WaterWrapper* InWrapper, agxModel::WindAndWaterController::WaterFlowGenerator* InNativeGenerator)
+	FDynamicWaterRef() = default;
+	FDynamicWaterRef(agxModel::WaterWrapper* InWrapper, agxModel::WindAndWaterController::WaterFlowGenerator* InNativeGenerator)
 		: NativeWaterWrapper(InWrapper),
 		  NativeWaterFlowGenerator(InNativeGenerator)
 	{
 	}
 };
 
-struct FExt_AddedMassInteractionRef
+struct FAddedMassInteractionRef
 {
 	agx::AddedMassInteractionRef Native;
 
-	FExt_AddedMassInteractionRef() = default;
-	FExt_AddedMassInteractionRef(agx::AddedMassInteraction* InNative)
+	FAddedMassInteractionRef() = default;
+	FAddedMassInteractionRef(agx::AddedMassInteraction* InNative)
 		: Native(InNative)
 	{
 	}

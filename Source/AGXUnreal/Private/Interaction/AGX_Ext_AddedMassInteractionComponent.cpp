@@ -8,7 +8,7 @@
 #include "AGX_Simulation.h"
 #include "Utilities/AGX_StringUtilities.h"
 
-FExt_AddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetOrCreateNative()
+FAddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetOrCreateNative()
 {
 	if (!HasNative())
 	{
@@ -128,7 +128,7 @@ void UAGX_Ext_AddedMassInteractionComponent::InitializeNative()
 	check(HasNative());
 }
 
-FExt_AddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetNative()
+FAddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetNative()
 {
 	if (!HasNative())
 	{
@@ -137,7 +137,7 @@ FExt_AddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetNat
 	return &NativeBarrier;
 }
 
-const FExt_AddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetNative() const
+const FAddedMassInteractionBarrier* UAGX_Ext_AddedMassInteractionComponent::GetNative() const
 {
 	if (!HasNative())
 	{

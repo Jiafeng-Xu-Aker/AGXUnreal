@@ -8,10 +8,10 @@
 // System includes.
 #include <memory>
 
-enum class EAGX_Ext_WindAndWaterParametersCoefficient : uint8;
-enum class EAGX_Ext_WindAndWaterShapeTessellation : uint8;
+enum class EAGX_WindAndWaterParametersCoefficient : uint8;
+enum class EAGX_WindAndWaterShapeTessellation : uint8;
 struct FRigidBodyBarrier;
-class FExt_WindAndWaterControllerBarrier;
+class FWindAndWaterControllerBarrier;
 struct FExt_WindAndWaterParametersRef;
 
 /**
@@ -23,13 +23,13 @@ struct FExt_WindAndWaterParametersRef;
  * This class handles all translation between Unreal Engine types and
  * AGX Dynamics types, such as back and forth between FVector and agx::Vec3.
  */
-class AGXUNREALBARRIER_API FExt_WindAndWaterParametersBarrier
+class AGXUNREALBARRIER_API FWindAndWaterParametersBarrier
 {
 public:
-	FExt_WindAndWaterParametersBarrier();
-	FExt_WindAndWaterParametersBarrier(std::unique_ptr<FExt_WindAndWaterParametersRef> Native);
-	FExt_WindAndWaterParametersBarrier(FExt_WindAndWaterParametersBarrier&& Other) noexcept;
-	~FExt_WindAndWaterParametersBarrier();
+	FWindAndWaterParametersBarrier();
+	FWindAndWaterParametersBarrier(std::unique_ptr<FExt_WindAndWaterParametersRef> Native);
+	FWindAndWaterParametersBarrier(FWindAndWaterParametersBarrier&& Other) noexcept;
+	~FWindAndWaterParametersBarrier();
 	
 	bool HasNative() const;
 	FExt_WindAndWaterParametersRef* GetNative();
@@ -43,10 +43,10 @@ public:
 	void SetNativeAddress(uintptr_t NativeAddress);
 	void ReleaseNative();
 
-	void SetCoefficient(EAGX_Ext_WindAndWaterParametersCoefficient Coefficient, double Value) const;
-	void SetShapeTessellation(EAGX_Ext_WindAndWaterShapeTessellation ShapeTessellation) const;
-	static void SetHydrodynamicCoefficient(FExt_WindAndWaterControllerBarrier* Controller, FRigidBodyBarrier* RigidBody, EAGX_Ext_WindAndWaterParametersCoefficient Coefficient, double Value);
-	static void SetAerodynamicCoefficient(FExt_WindAndWaterControllerBarrier* Controller, FRigidBodyBarrier* RigidBody, EAGX_Ext_WindAndWaterParametersCoefficient Coefficient, double Value);
+	void SetCoefficient(EAGX_WindAndWaterParametersCoefficient Coefficient, double Value) const;
+	void SetShapeTessellation(EAGX_WindAndWaterShapeTessellation ShapeTessellation) const;
+	static void SetHydrodynamicCoefficient(FWindAndWaterControllerBarrier* Controller, FRigidBodyBarrier* RigidBody, EAGX_WindAndWaterParametersCoefficient Coefficient, double Value);
+	static void SetAerodynamicCoefficient(FWindAndWaterControllerBarrier* Controller, FRigidBodyBarrier* RigidBody, EAGX_WindAndWaterParametersCoefficient Coefficient, double Value);
 
 protected:
 	std::unique_ptr<FExt_WindAndWaterParametersRef> NativeRef;

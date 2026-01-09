@@ -8,14 +8,14 @@
 // System includes.
 #include <memory>
 
-#include "Ext_WindAndWaterParametersBarrier.h"
+#include "WindAndWaterParametersBarrier.h"
 
 
 class FExt_WaterFlowGeneratorBarrier;
-class FExt_DynamicWaterBarrier;
+class FDynamicWaterBarrier;
 class FWireBarrier;
 struct FShapeBarrier;
-struct FExt_WindAndWaterControllerRef;
+struct FWindAndWaterControllerRef;
 struct FGeometryRef;
 
 /**
@@ -27,18 +27,18 @@ struct FGeometryRef;
  * This class handles all translation between Unreal Engine types and
  * AGX Dynamics types, such as back and forth between FVector and agx::Vec3.
  */
-class AGXUNREALBARRIER_API FExt_WindAndWaterControllerBarrier
+class AGXUNREALBARRIER_API FWindAndWaterControllerBarrier
 {
 public:
-	FExt_WindAndWaterControllerBarrier();
-	FExt_WindAndWaterControllerBarrier(std::unique_ptr<FExt_WindAndWaterControllerRef> Native);
-	FExt_WindAndWaterControllerBarrier(FExt_WindAndWaterControllerBarrier&& Other) noexcept;
-	~FExt_WindAndWaterControllerBarrier();
+	FWindAndWaterControllerBarrier();
+	FWindAndWaterControllerBarrier(std::unique_ptr<FWindAndWaterControllerRef> Native);
+	FWindAndWaterControllerBarrier(FWindAndWaterControllerBarrier&& Other) noexcept;
+	~FWindAndWaterControllerBarrier();
 	
 	bool HasNative() const;
 	void AllocateNative();
-	FExt_WindAndWaterControllerRef* GetNative();
-	const FExt_WindAndWaterControllerRef* GetNative() const;
+	FWindAndWaterControllerRef* GetNative();
+	const FWindAndWaterControllerRef* GetNative() const;
 
 	/// @return The address of the underlying AGX Dynamics object.
 	uintptr_t GetNativeAddress() const;
@@ -48,20 +48,20 @@ public:
 	void SetNativeAddress(uintptr_t NativeAddress);
 	void ReleaseNative();
 	
-	FExt_WindAndWaterParametersBarrier GetOrCreateHydrodynamicsParameters(FShapeBarrier* Shape) const;
-	FExt_WindAndWaterParametersBarrier GetOrCreateHydrodynamicsParameters(FWireBarrier* Wire) const;
+	FWindAndWaterParametersBarrier GetOrCreateHydrodynamicsParameters(FShapeBarrier* Shape) const;
+	FWindAndWaterParametersBarrier GetOrCreateHydrodynamicsParameters(FWireBarrier* Wire) const;
 	
-	FExt_WindAndWaterParametersBarrier GetOrCreateAerodynamicsParameters(FShapeBarrier* Shape) const;
-	FExt_WindAndWaterParametersBarrier GetOrCreateAerodynamicsParameters(FWireBarrier* Wire) const;
+	FWindAndWaterParametersBarrier GetOrCreateAerodynamicsParameters(FShapeBarrier* Shape) const;
+	FWindAndWaterParametersBarrier GetOrCreateAerodynamicsParameters(FWireBarrier* Wire) const;
 
 	bool SetEnableAerodynamics(FShapeBarrier* Shape, bool bEnabled);
 	bool SetEnableAerodynamics(FWireBarrier* Wire, bool bEnabled);
 	bool SetEnableHydrodynamics(FShapeBarrier* Shape, bool bEnabled);
 	bool SetEnableHydrodynamics(FWireBarrier* Wire, bool bEnabled);
 	bool AddWater(const FShapeBarrier* Shape);
-	bool SetWaterWrapper(FShapeBarrier* Shape, FExt_DynamicWaterBarrier* DynamicWater);
-	bool SetWaterFlowGenerator(FShapeBarrier* Shape, FExt_DynamicWaterBarrier* WaterWrapper);
+	bool SetWaterWrapper(FShapeBarrier* Shape, FDynamicWaterBarrier* DynamicWater);
+	bool SetWaterFlowGenerator(FShapeBarrier* Shape, FDynamicWaterBarrier* WaterWrapper);
 
 private:
-	std::unique_ptr<FExt_WindAndWaterControllerRef> NativeRef;
+	std::unique_ptr<FWindAndWaterControllerRef> NativeRef;
 };

@@ -1,46 +1,46 @@
 ﻿// Copyright Aker Solutions. All rights reserved.
 
 
-#include "Interaction/Ext_AddedMassInteractionBarrier.h"
+#include "Interaction/AddedMassInteractionBarrier.h"
 
 #include "BarrierOnly/AGXRefs.h"
 #include "AGX_LogCategory.h"
 #include "RigidBodyBarrier.h"
 
-FExt_AddedMassInteractionBarrier::FExt_AddedMassInteractionBarrier()
-	: NativeRef{new FExt_AddedMassInteractionRef}
+FAddedMassInteractionBarrier::FAddedMassInteractionBarrier()
+	: NativeRef{new FAddedMassInteractionRef}
 {
 }
 
-FExt_AddedMassInteractionBarrier::FExt_AddedMassInteractionBarrier(FExt_AddedMassInteractionBarrier&& Other) noexcept
+FAddedMassInteractionBarrier::FAddedMassInteractionBarrier(FAddedMassInteractionBarrier&& Other) noexcept
 	: NativeRef{std::move(Other.NativeRef)}
 {
 }
 
-FExt_AddedMassInteractionBarrier::FExt_AddedMassInteractionBarrier(std::unique_ptr<FExt_AddedMassInteractionRef> Native)
+FAddedMassInteractionBarrier::FAddedMassInteractionBarrier(std::unique_ptr<FAddedMassInteractionRef> Native)
 	: NativeRef{std::move(Native)}
 {
 }
 
-FExt_AddedMassInteractionBarrier::~FExt_AddedMassInteractionBarrier()
+FAddedMassInteractionBarrier::~FAddedMassInteractionBarrier()
 {
 	// Must provide a destructor implementation in the .cpp file because the
 	// std::unique_ptr NativeRef's destructor must be able to see the definition,
 	// not just the forward declaration, of FExt_AddedMassInteractionRef.
 }
 
-FExt_AddedMassInteractionBarrier& FExt_AddedMassInteractionBarrier::operator=(FExt_AddedMassInteractionBarrier&& Other) noexcept
+FAddedMassInteractionBarrier& FAddedMassInteractionBarrier::operator=(FAddedMassInteractionBarrier&& Other) noexcept
 {
 	NativeRef = std::move(Other.NativeRef);
 	return *this;
 }
 
-bool FExt_AddedMassInteractionBarrier::HasNative() const
+bool FAddedMassInteractionBarrier::HasNative() const
 {
 	return NativeRef->Native != nullptr;
 }
 
-void FExt_AddedMassInteractionBarrier::AllocateNative(const FRigidBodyBarrier* RigidBodyBarrier1, const FRigidBodyBarrier* RigidBodyBarrier2)
+void FAddedMassInteractionBarrier::AllocateNative(const FRigidBodyBarrier* RigidBodyBarrier1, const FRigidBodyBarrier* RigidBodyBarrier2)
 {
 	check(!HasNative());
 	const agx::RigidBodyRef RigidBody1 = RigidBodyBarrier1 ? RigidBodyBarrier1->GetNative()->Native.get(): nullptr;
@@ -48,19 +48,19 @@ void FExt_AddedMassInteractionBarrier::AllocateNative(const FRigidBodyBarrier* R
 	NativeRef->Native = new agx::AddedMassInteraction(RigidBody1, RigidBody2);
 }
 
-void FExt_AddedMassInteractionBarrier::ReleaseNative()
+void FAddedMassInteractionBarrier::ReleaseNative()
 {
 	check(HasNative());
 	NativeRef->Native = nullptr;
 }
 
-void FExt_AddedMassInteractionBarrier::SetEnable(bool bIsEnabled)
+void FAddedMassInteractionBarrier::SetEnable(bool bIsEnabled)
 {
 	check(HasNative());
 	NativeRef->Native->setEnable(bIsEnabled);
 }
 
-void FExt_AddedMassInteractionBarrier::AssignRigidBody1Block(const TArray<double, TFixedAllocator<36>>& Block6x6) const
+void FAddedMassInteractionBarrier::AssignRigidBody1Block(const TArray<double, TFixedAllocator<36>>& Block6x6) const
 {
 	if (NativeRef->Native->getRigidBody1())
 	{
@@ -81,7 +81,7 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody1Block(const TArray<double
 	}
 }
 
-void FExt_AddedMassInteractionBarrier::AssignRigidBody2Block(const TArray<double, TFixedAllocator<36>>& Block6x6) const
+void FAddedMassInteractionBarrier::AssignRigidBody2Block(const TArray<double, TFixedAllocator<36>>& Block6x6) const
 {
 	if (NativeRef->Native->getRigidBody2())
 	{
@@ -101,7 +101,7 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody2Block(const TArray<double
 	}
 }
 
-void FExt_AddedMassInteractionBarrier::AssignOffDiagonalBlock(const TArray<double, TFixedAllocator<36>>& Block6x6) const
+void FAddedMassInteractionBarrier::AssignOffDiagonalBlock(const TArray<double, TFixedAllocator<36>>& Block6x6) const
 {
 	if (NativeRef->Native->getRigidBody1() && NativeRef->Native->getRigidBody2())
 	{
@@ -122,7 +122,7 @@ void FExt_AddedMassInteractionBarrier::AssignOffDiagonalBlock(const TArray<doubl
 	}
 }
 
-void FExt_AddedMassInteractionBarrier::AssignRigidBody1BlockAt(const TArray<double, TFixedAllocator<36>>& Block6x6, const FVector& At) const
+void FAddedMassInteractionBarrier::AssignRigidBody1BlockAt(const TArray<double, TFixedAllocator<36>>& Block6x6, const FVector& At) const
 {
 	if (agx::RigidBodyRef RigidBody = NativeRef->Native->getRigidBody1())
 	{
@@ -146,17 +146,17 @@ void FExt_AddedMassInteractionBarrier::AssignRigidBody1BlockAt(const TArray<doub
 	}
 }
 
-FExt_AddedMassInteractionRef* FExt_AddedMassInteractionBarrier::GetNative()
+FAddedMassInteractionRef* FAddedMassInteractionBarrier::GetNative()
 {
 	return NativeRef.get();
 }
 
-const FExt_AddedMassInteractionRef* FExt_AddedMassInteractionBarrier::GetNative() const
+const FAddedMassInteractionRef* FAddedMassInteractionBarrier::GetNative() const
 {
 	return NativeRef.get();
 }
 
-uintptr_t FExt_AddedMassInteractionBarrier::GetNativeAddress() const
+uintptr_t FAddedMassInteractionBarrier::GetNativeAddress() const
 {
 	if (!HasNative())
 	{
@@ -166,7 +166,7 @@ uintptr_t FExt_AddedMassInteractionBarrier::GetNativeAddress() const
 	return reinterpret_cast<uintptr_t>(NativeRef->Native.get());
 }
 
-void FExt_AddedMassInteractionBarrier::SetNativeAddress(uintptr_t NativeAddress)
+void FAddedMassInteractionBarrier::SetNativeAddress(uintptr_t NativeAddress)
 {
 	if (NativeAddress == GetNativeAddress())
 	{

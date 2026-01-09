@@ -9,7 +9,7 @@
 // System includes.
 #include <memory>
 
-struct FExt_DynamicWaterRef;
+struct FDynamicWaterRef;
 /**
  * Barrier between UAGX_Ext_WaterWrapperComponent and agxModel::WaterWrapper.
  * UAGX_Ext_WaterWrapperComponent holds an instance of Ext_WaterWrapperBarrier
@@ -19,19 +19,19 @@ struct FExt_DynamicWaterRef;
  * This class handles all translation between Unreal Engine types and
  * AGX Dynamics types, such as back and forth between FVector and agx::Vec3.
  */
-class AGXUNREALBARRIER_API FExt_DynamicWaterBarrier
+class AGXUNREALBARRIER_API FDynamicWaterBarrier
 {
 public:
-	FExt_DynamicWaterBarrier();
-	FExt_DynamicWaterBarrier(std::unique_ptr<FExt_DynamicWaterRef> Native);
-	FExt_DynamicWaterBarrier(FExt_DynamicWaterBarrier&& Other) noexcept;
-	virtual ~FExt_DynamicWaterBarrier();
+	FDynamicWaterBarrier();
+	FDynamicWaterBarrier(std::unique_ptr<FDynamicWaterRef> Native);
+	FDynamicWaterBarrier(FDynamicWaterBarrier&& Other) noexcept;
+	virtual ~FDynamicWaterBarrier();
 
 	bool HasNative() const;
 	void AllocateNative();
 	void ReleaseNative();
-	FExt_DynamicWaterRef* GetNative();
-	const FExt_DynamicWaterRef* GetNative() const;
+	FDynamicWaterRef* GetNative();
+	const FDynamicWaterRef* GetNative() const;
 
 	/// @return The address of the underlying AGX Dynamics object.
 	uintptr_t GetNativeAddress() const;
@@ -44,5 +44,5 @@ public:
 	virtual FVector GetVelocity(const FVector& WorldPoint) const = 0;
 
 protected:
-	std::unique_ptr<FExt_DynamicWaterRef> NativeRef;
+	std::unique_ptr<FDynamicWaterRef> NativeRef;
 };

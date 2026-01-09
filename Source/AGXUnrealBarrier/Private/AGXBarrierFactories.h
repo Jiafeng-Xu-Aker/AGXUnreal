@@ -20,7 +20,7 @@
 #include "Materials/ContactMaterialBarrier.h"
 #include "Materials/ShapeMaterialBarrier.h"
 #include "Materials/TerrainMaterialBarrier.h"
-#include "Model/Ext_WindAndWaterParametersBarrier.h"
+#include "Model/WindAndWaterParametersBarrier.h"
 #include "RigidBodyBarrier.h"
 #include "Sensors/RtAmbientMaterialBarrier.h"
 #include "Shapes/AnyShapeBarrier.h"
@@ -180,7 +180,7 @@ namespace AGXBarrierFactories
 
 	FSteeringBarrier CreateSteeringBarrier(agxVehicle::Steering* Steering);
 	
-	FExt_WindAndWaterParametersBarrier CreateWindAndWaterParametersBarrier(agxModel::WindAndWaterParameters* WindAndWaterParameters);
+	FWindAndWaterParametersBarrier CreateWindAndWaterParametersBarrier(agxModel::WindAndWaterParameters* WindAndWaterParameters);
 	
 	FTrackBarrier CreateTrackBarrier(agxVehicle::Track* Track);
 }

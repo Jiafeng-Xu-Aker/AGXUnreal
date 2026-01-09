@@ -15,8 +15,8 @@
 // Standard library includes.
 #include <memory>
 
-class FExt_AddedMassInteractionBarrier;
-class FExt_WindAndWaterControllerBarrier;
+class FAddedMassInteractionBarrier;
+class FWindAndWaterControllerBarrier;
 class FConstraintBarrier;
 class FContactMaterialBarrier;
 class FShapeMaterialBarrier;
@@ -26,8 +26,8 @@ class FTerrainPagerBarrier;
 class FTireBarrier;
 class FTrackBarrier;
 class FWireBarrier;
-class FExt_AddedMassInteractionBarrier;
-class FExt_WindAndWaterControllerBarrier;
+class FAddedMassInteractionBarrier;
+class FWindAndWaterControllerBarrier;
 
 struct FObserverFrameBarrier;
 struct FRigidBodyBarrier;
@@ -63,8 +63,8 @@ public:
 	bool Add(FTireBarrier& Tire);
 	bool Add(FTrackBarrier& Track);
 	bool Add(FWireBarrier& Wire);
-	bool Add(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
-	bool Add(FExt_AddedMassInteractionBarrier& AddedMassInteractionbarrier);
+	bool Add(FWindAndWaterControllerBarrier& WindAnWaterController);
+	bool Add(FAddedMassInteractionBarrier& AddedMassInteractionbarrier);
 	bool Remove(FConstraintBarrier& Constraint);
 	bool Remove(FContactMaterialBarrier& ContactMaterial);
 	bool Remove(FObserverFrameBarrier& Frame);
@@ -83,8 +83,8 @@ public:
 	bool Remove(FTireBarrier& Tire);
 	bool Remove(FTrackBarrier& Track);
 	bool Remove(FWireBarrier& Wire);
-	bool Remove(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
-	bool Remove(FExt_AddedMassInteractionBarrier& AddedMassInteraction);
+	bool Remove(FWindAndWaterControllerBarrier& WindAnWaterController);
+	bool Remove(FAddedMassInteractionBarrier& AddedMassInteraction);
 	void SetEnableCollisionGroupPair(const FName& Group1, const FName& Group2, bool CanCollide);
 
 	static void SetEnableCollision(FRigidBodyBarrier& Body1, FRigidBodyBarrier& Body2, bool Enable);

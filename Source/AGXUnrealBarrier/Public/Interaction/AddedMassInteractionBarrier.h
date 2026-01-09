@@ -5,26 +5,26 @@
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
 
-struct FExt_AddedMassInteractionRef;
+struct FAddedMassInteractionRef;
 struct FRigidBodyBarrier;
 
 /**
- * TODO: add description
+ * Barrier between UAGX_Ext_AddedMassInteraction and agx::AddedMassInteraction.
  */
-class AGXUNREALBARRIER_API FExt_AddedMassInteractionBarrier
+class AGXUNREALBARRIER_API FAddedMassInteractionBarrier
 {
 public:
-	FExt_AddedMassInteractionBarrier();
-	FExt_AddedMassInteractionBarrier(std::unique_ptr<FExt_AddedMassInteractionRef> Native);
-	FExt_AddedMassInteractionBarrier(FExt_AddedMassInteractionBarrier&& Other) noexcept;
-	~FExt_AddedMassInteractionBarrier();
+	FAddedMassInteractionBarrier();
+	FAddedMassInteractionBarrier(std::unique_ptr<FAddedMassInteractionRef> Native);
+	FAddedMassInteractionBarrier(FAddedMassInteractionBarrier&& Other) noexcept;
+	~FAddedMassInteractionBarrier();
 
-	FExt_AddedMassInteractionBarrier& operator=(FExt_AddedMassInteractionBarrier&& Other) noexcept;
+	FAddedMassInteractionBarrier& operator=(FAddedMassInteractionBarrier&& Other) noexcept;
 
 	bool HasNative() const;
 	void AllocateNative(const FRigidBodyBarrier* RigidBodyBarrier1, const FRigidBodyBarrier* RigidBodyBarrier2);
-	FExt_AddedMassInteractionRef* GetNative();
-	const FExt_AddedMassInteractionRef* GetNative() const;
+	FAddedMassInteractionRef* GetNative();
+	const FAddedMassInteractionRef* GetNative() const;
 
 	/// @return The address of the underlying AGX Dynamics object.
 	uintptr_t GetNativeAddress() const;
@@ -40,5 +40,5 @@ public:
 	void AssignOffDiagonalBlock(const TArray<double, TFixedAllocator<36>>& Block6x6) const;
 	void AssignRigidBody1BlockAt(const TArray<double, TFixedAllocator<36>>& Block6x6, const FVector& At) const;
 private:
-	std::unique_ptr<FExt_AddedMassInteractionRef> NativeRef;
+	std::unique_ptr<FAddedMassInteractionRef> NativeRef;
 };

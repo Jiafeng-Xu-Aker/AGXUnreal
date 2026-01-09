@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AGX_NativeOwner.h"
 #include "Components/SceneComponent.h"
-#include "Model/Ext_DynamicWaterBarrier.h"
+#include "Model/DynamicWaterBarrier.h"
 #include "AGX_Ext_DynamicWaterComponent.generated.h"
 
 
@@ -24,12 +24,12 @@ public:
 	 *
 	 * @return The Native Barrier for this controller.
 	 */
-	FExt_DynamicWaterBarrier* GetOrCreateNative();
+	FDynamicWaterBarrier* GetOrCreateNative();
 
 	/// Return the native AGX Dynamics representation of this controller. May return nullptr.
-	FExt_DynamicWaterBarrier* GetNative();
+	FDynamicWaterBarrier* GetNative();
 
-	const FExt_DynamicWaterBarrier* GetNative() const;
+	const FDynamicWaterBarrier* GetNative() const;
 
 	// ~Begin IAGX_NativeOwner interface.
 	virtual bool HasNative() const override;
@@ -50,5 +50,5 @@ private:
 	// Create the native AGX Dynamics object.
 	void InitializeNative();
 
-	std::unique_ptr<FExt_DynamicWaterBarrier> NativeBarrier;
+	std::unique_ptr<FDynamicWaterBarrier> NativeBarrier;
 };

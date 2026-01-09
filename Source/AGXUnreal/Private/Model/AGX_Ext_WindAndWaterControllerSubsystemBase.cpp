@@ -6,8 +6,8 @@
 #include "AGX_Simulation.h"
 #include "Model/AGX_Ext_DynamicWaterComponent.h"
 #include "Model/AGX_Ext_WindAndWaterAwareShapeMaterial.h"
-#include "Model/Ext_WindAndWaterControllerBarrier.h"
-#include "Model/Ext_WindAndWaterParametersEnums.h"
+#include "Model/WindAndWaterControllerBarrier.h"
+#include "Model/WindAndWaterParametersEnums.h"
 #include "Shapes/AGX_BoxShapeComponent.h"
 #include "Shapes/AGX_HeightFieldShapeComponent.h"
 #include "Shapes/AGX_ShapeComponent.h"
@@ -65,7 +65,7 @@ void UAGX_Ext_WindAndWaterControllerSubsystemBase::Deinitialize()
 	NativeWindAndWaterControllerBarrier.ReleaseNative();
 }
 
-FExt_WindAndWaterControllerBarrier* UAGX_Ext_WindAndWaterControllerSubsystemBase::GetNative()
+FWindAndWaterControllerBarrier* UAGX_Ext_WindAndWaterControllerSubsystemBase::GetNative()
 {
 	return HasNative() ? &NativeWindAndWaterControllerBarrier : nullptr;
 }
@@ -85,7 +85,7 @@ bool UAGX_Ext_WindAndWaterControllerSubsystemBase::SetEnableAerodynamics(UAGX_Wi
 	return HasNative() ? NativeWindAndWaterControllerBarrier.SetEnableAerodynamics(Wire->GetOrCreateNative(), bEnabled) : false;
 }
 
-void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_Ext_WindAndWaterParametersCoefficient Coefficient, double Value)
+void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_WindAndWaterParametersCoefficient Coefficient, double Value)
 {
 	if (HasNative())
 	{
@@ -93,7 +93,7 @@ void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAG
 	}
 }
 
-void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_Ext_WindAndWaterShapeTessellation ShapeTessellation)
+void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_WindAndWaterShapeTessellation ShapeTessellation)
 {
 	if (HasNative())
 	{
@@ -101,7 +101,7 @@ void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetHydrodynamicParameters(UAG
 	}
 }
 
-void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetAerodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_Ext_WindAndWaterParametersCoefficient Coefficient, double Value)
+void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetAerodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_WindAndWaterParametersCoefficient Coefficient, double Value)
 {
 	if (HasNative())
 	{
@@ -109,7 +109,7 @@ void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetAerodynamicParameters(UAGX
 	}
 }
 
-void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetAerodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_Ext_WindAndWaterShapeTessellation ShapeTessellation)
+void UAGX_Ext_WindAndWaterControllerSubsystemBase::SetAerodynamicParameters(UAGX_ShapeComponent* Shape, EAGX_WindAndWaterShapeTessellation ShapeTessellation)
 {
 	if (HasNative())
 	{
@@ -135,15 +135,15 @@ bool UAGX_Ext_WindAndWaterControllerSubsystemBase::UpdateNativeWindAndWaterParam
 		}
 	}
 
-	SetHydrodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::PRESSURE_DRAG, ShapeMaterial->HydroParameters.PressureDrag_);
-	SetHydrodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::VISCOUS_DRAG, ShapeMaterial->HydroParameters.ViscousDrag_);
-	SetHydrodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::LIFT, ShapeMaterial->HydroParameters.Lift_);
-	SetHydrodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::BUOYANCY, ShapeMaterial->HydroParameters.Buoyancy_);
+	SetHydrodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::PRESSURE_DRAG, ShapeMaterial->HydroParameters.PressureDrag_);
+	SetHydrodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::VISCOUS_DRAG, ShapeMaterial->HydroParameters.ViscousDrag_);
+	SetHydrodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::LIFT, ShapeMaterial->HydroParameters.Lift_);
+	SetHydrodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::BUOYANCY, ShapeMaterial->HydroParameters.Buoyancy_);
 	SetHydrodynamicParameters(Shape, ShapeMaterial->HydroParameters.ShapeTessellation_);
 
-	SetAerodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::PRESSURE_DRAG, ShapeMaterial->AeroParameters.PressureDrag_);
-	SetAerodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::VISCOUS_DRAG, ShapeMaterial->AeroParameters.ViscousDrag_);
-	SetAerodynamicParameters(Shape, EAGX_Ext_WindAndWaterParametersCoefficient::LIFT, ShapeMaterial->AeroParameters.Lift_);
+	SetAerodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::PRESSURE_DRAG, ShapeMaterial->AeroParameters.PressureDrag_);
+	SetAerodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::VISCOUS_DRAG, ShapeMaterial->AeroParameters.ViscousDrag_);
+	SetAerodynamicParameters(Shape, EAGX_WindAndWaterParametersCoefficient::LIFT, ShapeMaterial->AeroParameters.Lift_);
 	SetAerodynamicParameters(Shape, ShapeMaterial->AeroParameters.ShapeTessellation_);
 	return true;
 }
