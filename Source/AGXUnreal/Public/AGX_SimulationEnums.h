@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -39,4 +39,32 @@ enum EAGX_GravityModel
 	/** Gravity uniform in magnitude over the entire space and directed from any given position
 	   towards a single point. */
 	Point UMETA(DisplayName = "Point Gravity Field")
+};
+
+UENUM()
+enum class EAGX_DebuggingMode : uint8
+{
+	/** Debugging is turned off. */
+	None,
+
+	/**
+	 * Use Web Debugger, running in a browser.
+	 * Open http://localhost:<WebDebuggerServerPort>/ to see the debugging UI.
+	 *
+	 * Currently not supported on Linux.
+	 */
+	WebDebugger,
+
+	/**
+	 * Remote debugging allows agxViewer, the default scene viewer in AGX
+	 * Dynamics, to connect to the AGX_Simulation running inside Unreal Engine
+	 * and render the internal simulation state using its built-in debug
+	 * rendering capabilities.
+	 *
+	 * To connect to a running Unreal Engine instance launch agxViewer with
+	 *    agxViewer -p --connect localhost:<PORT>
+	 * where <PORT> is the port number configured in Project Settings > Plugins >  AGX Dynamics >
+	 * Debug > RemoteDebuggingPort.
+	 */
+	RemoteDebugger,
 };

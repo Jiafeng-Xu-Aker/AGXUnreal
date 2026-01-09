@@ -1,11 +1,11 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Materials/MaterialLibraryBarrier.h"
 
 // AGX Dynamics for Unreal includes.
-#include <AGX_Environment.h>
-#include <AGXBarrierFactories.h>
-#include <TypeConversions.h>
+#include "AGX_Environment.h"
+#include "AGXBarrierFactories.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 // AGX Dynamics includes.
 #include <BeginAGXIncludes.h>

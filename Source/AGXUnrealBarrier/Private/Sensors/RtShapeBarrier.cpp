@@ -1,10 +1,10 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Sensors/RtShapeBarrier.h"
 
 // AGX Dynamics for Unreal includes.
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "Sensors/SensorRef.h"
-#include "TypeConversions.h"
 
 FRtShapeBarrier::FRtShapeBarrier()
 	: NativeRef {new FRtShapeRef}

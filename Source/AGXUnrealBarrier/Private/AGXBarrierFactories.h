@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -13,6 +13,7 @@
 #include "Constraints/HingeBarrier.h"
 #include "Constraints/LockJointBarrier.h"
 #include "Constraints/PrismaticBarrier.h"
+#include "Constraints/SingleControllerConstraint1DOFBarrier.h"
 #include "Constraints/TwistRangeControllerBarrier.h"
 #include "Contacts/ContactPointBarrier.h"
 #include "Contacts/ShapeContactBarrier.h"
@@ -28,6 +29,7 @@
 #include "Shapes/CylinderShapeBarrier.h"
 #include "Shapes/SphereShapeBarrier.h"
 #include "Shapes/TrimeshShapeBarrier.h"
+#include "SimulationBarrier.h"
 #include "Terrain/ShovelBarrier.h"
 #include "Tires/TwoBodyTireBarrier.h"
 #include "Vehicle/TrackBarrier.h"
@@ -36,6 +38,9 @@
 #include "Wire/WireWinchBarrier.h"
 
 class FTerrainBarrier;
+class FWheelJointBarrier;
+
+struct FSteeringBarrier;
 
 namespace agx
 {
@@ -46,6 +51,7 @@ namespace agx
 	class BallJoint;
 	class CylindricalJoint;
 	class DistanceJoint;
+	class SingleControllerConstraint1DOF;
 	class TwistRangeController;
 }
 
@@ -75,6 +81,11 @@ namespace agxTerrain
 	class TerrainMaterial;
 }
 
+namespace agxSDK
+{
+	class Simulation;
+}
+
 namespace agxSensor
 {
 	class RtAmbientMaterial;
@@ -89,7 +100,9 @@ namespace agxWire
 
 namespace agxVehicle
 {
+	class Steering;
 	class Track;
+	class WheelJoint;
 }
 
 /**
@@ -103,6 +116,8 @@ namespace agxVehicle
 namespace AGXBarrierFactories
 {
 	FRigidBodyBarrier AGXUNREALBARRIER_API CreateRigidBodyBarrier(agx::RigidBody* Body);
+
+	FSimulationBarrier CreateSimulationBarrier(agxSDK::Simulation* Simulation);
 
 	FAnyShapeBarrier CreateAnyShapeBarrier(agxCollide::Shape* Shape);
 
@@ -129,6 +144,11 @@ namespace AGXBarrierFactories
 	FDistanceJointBarrier CreateDistanceJointBarrier(agx::DistanceJoint* DistanceJoint);
 
 	FLockJointBarrier CreateLockJointBarrier(agx::LockJoint* LockJoint);
+
+	FSingleControllerConstraint1DOFBarrier CreateSingleControllerConstraint1DOFBarrier(
+		agx::SingleControllerConstraint1DOF* Constraint);
+
+	FWheelJointBarrier CreateWheelJointBarrier(agxVehicle::WheelJoint* WJ);
 
 	FTwistRangeControllerBarrier CreateTwistRangeControllerBarrier(
 		agx::TwistRangeController* Controller);
@@ -157,6 +177,8 @@ namespace AGXBarrierFactories
 	FWireWinchBarrier CreateWireWinchBarrier(agxWire::WireWinchController* Winch);
 
 	FShovelBarrier CreateShovelBarrier(agxTerrain::Shovel* Shovel);
+
+	FSteeringBarrier CreateSteeringBarrier(agxVehicle::Steering* Steering);
 	
 	FExt_WindAndWaterParametersBarrier CreateWindAndWaterParametersBarrier(agxModel::WindAndWaterParameters* WindAndWaterParameters);
 	

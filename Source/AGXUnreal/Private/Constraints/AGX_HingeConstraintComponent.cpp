@@ -1,21 +1,19 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Constraints/AGX_HingeConstraintComponent.h"
 
 // AGX Dynamics for Unreal includes.
-#include "AGX_LogCategory.h"
 #include "Constraints/HingeBarrier.h"
 #include "Utilities/AGX_ConstraintUtilities.h"
 #include "Utilities/AGX_StringUtilities.h"
 
-class FRigidBodyBarrier;
+struct FRigidBodyBarrier;
 
 UAGX_HingeConstraintComponent::UAGX_HingeConstraintComponent()
 	: UAGX_Constraint1DofComponent(
 		  {EDofFlag::DofFlagTranslational1, EDofFlag::DofFlagTranslational2,
 		   EDofFlag::DofFlagTranslational3, EDofFlag::DofFlagRotational1,
-		   EDofFlag::DofFlagRotational2},
-		  /*bbIsSecondaryConstraintRotational*/ true)
+		   EDofFlag::DofFlagRotational2})
 {
 	NativeBarrier.Reset(new FHingeBarrier());
 }

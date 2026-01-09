@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "Contacts/AGX_ShapeContact.h"
 #include "Contacts/AGX_ContactEnums.h"
 #include "Contacts/ShapeContactBarrier.h"
+#include "Net/WebDebuggerServerBarrier.h"
 #include "SimulationBarrier.h"
 
 // Unreal Engine includes.
@@ -25,17 +26,22 @@ class AAGX_Terrain;
 class UAGX_Ext_AddedMassInteractionComponent;
 class UAGX_ConstraintComponent;
 class UAGX_ContactMaterial;
+class UAGX_ObserverFrameComponent;
 class UAGX_RigidBodyComponent;
 class UAGX_ShapeMaterial;
+class UAGX_ShovelComponent;
+class UAGX_SteeringComponent;
 class UAGX_StaticMeshComponent;
 class UAGX_ShapeComponent;
+class UAGX_SteeringComponent;
 class UAGX_TireComponent;
+class UAGX_TrackComponent;
 class UAGX_WireComponent;
 
 class AActor;
 class UActorComponent;
 class UWorld;
-class FShapeBarrier;
+struct FShapeBarrier;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPreStepForward, double, Time);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPostStepForward, double, Time);
@@ -210,6 +216,16 @@ public: // Properties.
 	bool bEnableGlobalContactEventListener {true};
 
 	/**
+	 * If enabled, whenever a Blueprint Asset from an imported OpenPLX file is deleted, the
+	 * corresponding OpenPLX files located in Project/OpenPLXModels used by that Blueprint is
+	 * deleted.
+	 */
+	UPROPERTY(
+		Config, EditAnywhere, BlueprintReadOnly, Category = "OpenPLX",
+		Meta = (DisplayName = "Delete OpenPLX File Copy on Blueprint Deletion"))
+	bool bDeleteOpenPLXFileCopyOnBlueprintDeletion {true};
+
+	/**
 	 * Globally enable or disable AMOR (Merge Split Handler) in AGX Dynamics.
 	 * Note that each RigidBody / Geometry / Wire / Constraint need to enable merge/split
 	 * individually for AMOR to be used for those.
@@ -251,6 +267,7 @@ public: // Properties.
 	int32 RaytraceDeviceIndex {0};
 
 #if WITH_EDITORONLY_DATA
+
 	/**
 	 * Set to true to write an AGX Dynamics for Unreal archive of the initial state.
 	 * The archive is written to the path set in ExportPath on the first game Tick.
@@ -282,23 +299,35 @@ public: // Properties.
 		Meta = (EditCondition = "bOverrideDynamicWireContacts"))
 	bool bEnableDynamicWireContacts {false};
 
-	/**
-	 * Remote debugging allows agxViewer, the default scene viewer in AGX
-	 * Dynamics, to connect to the AGX_Simulation running inside Unreal Engine
-	 * and render the internal simulation state using its built-in debug
-	 * rendering capabilities.
-	 *
-	 * To connect to a running Unreal Engine instance launch agxViewer with
-	 *    agxViewer -p --connect localhost:<PORT>
-	 * where <PORT> is the port number configured in Project Settings > Plugins >  AGX Dynamics >
-	 * Debug > RemoteDebuggingPort.
-	 */
 	UPROPERTY(Config, EditAnywhere, Category = "Debug")
-	uint8 bRemoteDebugging : 1;
+	EAGX_DebuggingMode DebuggingMode {EAGX_DebuggingMode::None};
 
-	/** Network port to use for remote debugging. */
-	UPROPERTY(Config, EditAnywhere, Category = "Debug", Meta = (EditCondition = "bRemoteDebugging"))
-	int16 RemoteDebuggingPort;
+	/**
+	 * Network port to use for debugging.
+	 */
+	UPROPERTY(
+		Config, EditAnywhere, Category = "Debug",
+		Meta = (EditCondition = "DebuggingMode != EAGX_DebuggingMode::None", ClampMin = "0"))
+	int16 DebuggingPort {9001};
+
+	/**
+	 * Network port to use for debugging.
+	 * Open http://localhost:<WebDebuggerServerPort>/ to see the debugging UI.
+	 * Only relevant with DebuggingMode set to WebDebugger.
+	 */
+	UPROPERTY(
+		Config, EditAnywhere, Category = "Debug",
+		Meta = (EditCondition = "DebuggingMode == EAGX_DebuggingMode::WebDebugger", ClampMin = "0"))
+	int32 WebDebuggerServerPort {5173};
+
+	/**
+	 * If enabled, the Web Debugger view will automatically open in the web browser on Play.
+	 * Only relevant with DebuggingMode set to WebDebugger.
+	 */
+	UPROPERTY(
+		Config, EditAnywhere, Category = "Debug",
+		Meta = (EditCondition = "DebuggingMode == EAGX_DebuggingMode::WebDebugger"))
+	bool bOpenWebDebuggerViewInBrowserOnPlay {true};
 
 	/**
 	 * Draws all Shape Contacts to the screen each Simulation time step.
@@ -466,30 +495,38 @@ public: // Member functions.
 	UPROPERTY(BlueprintAssignable, Category = "Simulation")
 	FOnSeparation OnSeparation;
 
-	void Add(UAGX_ConstraintComponent& Constraint);
+	bool Add(UAGX_ConstraintComponent& Constraint);
+	bool Add(UAGX_ObserverFrameComponent& Frame);
 
 	/**
 	 * Note that Shapes that are child of the passed Rigid Body are NOT added to the simulation
 	 * when calling this function.
 	 */
-	void Add(UAGX_RigidBodyComponent& Body);
-	void Add(UAGX_ShapeComponent& Shape);
-	void Add(UAGX_ShapeMaterial& Shape);
-	void Add(UAGX_StaticMeshComponent& Body);
-	void Add(AAGX_Terrain& Terrain);
-	void Add(UAGX_TireComponent& Tire);
-	void Add(UAGX_WireComponent& Wire);
+	bool Add(UAGX_RigidBodyComponent& Body);
+	bool Add(UAGX_ShapeComponent& Shape);
+	bool Add(UAGX_ShapeMaterial& Material);
+	bool Add(UAGX_ShovelComponent& Shovel);
+	bool Add(UAGX_StaticMeshComponent& Body);
+	bool Add(UAGX_SteeringComponent& Steering);
+	bool Add(AAGX_Terrain& Terrain);
 	void Add(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction);
+	bool Add(UAGX_TireComponent& Tire);
+	bool Add(UAGX_TrackComponent& Track);
+	bool Add(UAGX_WireComponent& Wire);
 	
-	void Remove(UAGX_ConstraintComponent& Constraint);
-	void Remove(UAGX_RigidBodyComponent& Body);
-	void Remove(UAGX_ShapeComponent& Shape);
-	void Remove(UAGX_ShapeMaterial& Shape);
-	void Remove(UAGX_StaticMeshComponent& Body);
-	void Remove(AAGX_Terrain& Terrain);
-	void Remove(UAGX_TireComponent& Tire);
-	void Remove(UAGX_WireComponent& Wire);
+	bool Remove(UAGX_ConstraintComponent& Constraint);
+	bool Remove(UAGX_ObserverFrameComponent& Frame);
+	bool Remove(UAGX_RigidBodyComponent& Body);
+	bool Remove(UAGX_ShapeComponent& Shape);
+	bool Remove(UAGX_ShapeMaterial& Material);
+	bool Remove(UAGX_ShovelComponent& Shovel);
+	bool Remove(UAGX_SteeringComponent& Steering);
+	bool Remove(UAGX_StaticMeshComponent& Body);
 	void Remove(UAGX_Ext_AddedMassInteractionComponent& AddedMassInteraction);
+	bool Remove(AAGX_Terrain& Terrain);
+	bool Remove(UAGX_TireComponent& Tire);
+	bool Remove(UAGX_TrackComponent& Track);
+	bool Remove(UAGX_WireComponent& Wire);
 	
 	void Register(UAGX_ContactMaterial& Material);
 	void Unregister(UAGX_ContactMaterial& Material);
@@ -570,6 +607,15 @@ public: // Member functions.
 	 */
 	void EnsureStepperCreated();
 
+	UFUNCTION(BlueprintCallable, Category = "Simulation")
+	void StartWebDebugging(bool OpenViewInBrowser);
+
+	UFUNCTION(BlueprintCallable, Category = "Simulation")
+	void StopWebDebugging();
+
+	UFUNCTION(BlueprintCallable, Category = "Simulation")
+	bool IsWebDebuggingActive() const;
+
 	friend class AAGX_Stepper;
 
 private:
@@ -644,6 +690,7 @@ private:
 
 private:
 	FSimulationBarrier NativeBarrier;
+	FWebDebuggerServerBarrier DebuggerBarrier;
 
 	/// Time that we couldn't step because DeltaTime was not an even multiple
 	/// of the AGX Dynamics step size. That fraction of a time step is carried

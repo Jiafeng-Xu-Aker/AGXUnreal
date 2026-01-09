@@ -4,7 +4,7 @@
 
 #include <agxModel/WindAndWaterParameters.h>
 
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "Model/Ext_WindAndWaterControllerBarrier.h"
 #include "Model/Ext_WindAndWaterParametersEnums.h"
 

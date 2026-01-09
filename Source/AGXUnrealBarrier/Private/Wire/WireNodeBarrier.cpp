@@ -1,13 +1,13 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Wire/WireNodeBarrier.h"
 
 // AGX Dynamics for Unreal include.
 #include "AGXBarrierFactories.h"
 #include "BarrierOnly/AGXRefs.h"
-#include "RigidBodyBarrier.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "BarrierOnly/Wire/WireNodeRef.h"
+#include "RigidBodyBarrier.h"
 
 FWireNodeBarrier::FWireNodeBarrier()
 	: NativeRef {new FWireNodeRef()}

@@ -1,11 +1,11 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "AGXNotify.h"
 
 // AGX Dynamics for Unreal includes.
 #include "AGX_LogCategory.h"
 #include "AGXUnrealBarrier.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 void FAGXNotify::StartAgxNotify(ELogVerbosity::Type LogVerbosity)
 {

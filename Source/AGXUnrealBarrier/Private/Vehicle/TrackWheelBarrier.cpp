@@ -1,12 +1,12 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Vehicle/TrackWheelBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "BarrierOnly/Vehicle/TrackWheelRef.h"
 #include "RigidBodyBarrier.h"
-#include "TypeConversions.h"
 
 FTrackWheelBarrier::FTrackWheelBarrier()
 	: NativeRef {new FTrackWheelRef}

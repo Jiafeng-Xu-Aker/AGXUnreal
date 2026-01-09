@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -8,6 +8,7 @@
 
 // Unreal Engine includes.
 #include "IDetailCustomNodeBuilder.h"
+#include "Misc/EngineVersionComparison.h"
 #include "SceneOutlinerFilters.h"
 #include "Widgets/Input/SComboBox.h"
 

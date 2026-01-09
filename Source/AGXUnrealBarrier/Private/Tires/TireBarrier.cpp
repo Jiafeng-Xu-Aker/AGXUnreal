@@ -1,10 +1,10 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Tires/TireBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 FTireBarrier::FTireBarrier()
 	: NativeRef {new FTireRef}
@@ -58,6 +58,31 @@ void FTireBarrier::ReleaseNative()
 {
 	check(HasNative());
 	NativeRef->Native = nullptr;
+}
+
+uintptr_t FTireBarrier::GetNativeAddress() const
+{
+	if (!HasNative())
+		return 0;
+
+	return reinterpret_cast<uintptr_t>(NativeRef->Native.get());
+}
+
+void FTireBarrier::SetNativeAddress(uintptr_t NativeAddress)
+{
+	if (NativeAddress == GetNativeAddress())
+		return;
+
+	if (HasNative())
+		ReleaseNative();
+
+	if (NativeAddress == 0)
+	{
+		NativeRef->Native = nullptr;
+		return;
+	}
+
+	NativeRef->Native = reinterpret_cast<agxModel::Tire* > (NativeAddress);
 }
 
 FGuid FTireBarrier::GetGuid() const

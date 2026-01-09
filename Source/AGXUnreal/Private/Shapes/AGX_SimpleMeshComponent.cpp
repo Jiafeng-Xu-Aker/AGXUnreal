@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 // AGX Dynamics for Unreal includes.
 #include "Shapes/AGX_SimpleMeshComponent.h"
@@ -24,6 +24,7 @@
 #include "LocalVertexFactory.h"
 #include "SceneInterface.h"
 #include "SceneManagement.h"
+#include "SceneView.h"
 #include "DynamicMeshBuilder.h"
 #include "EngineGlobals.h"
 #include "Engine/Engine.h"
@@ -43,7 +44,11 @@ public:
 	FAGX_SimpleMeshSceneProxy(UAGX_SimpleMeshComponent* Component)
 		: FPrimitiveSceneProxy(Component)
 		, VertexFactory(GetScene().GetFeatureLevel(), "FAGX_SimpleMeshSceneProxy")
+#if UE_VERSION_OLDER_THAN(5, 7, 0)
 		, MaterialRelevance(Component->GetMaterialRelevance(GetScene().GetFeatureLevel()))
+#else
+		, MaterialRelevance(Component->GetMaterialRelevance(GetScene().GetShaderPlatform()))
+#endif
 	{
 		check(Component->MeshData);
 

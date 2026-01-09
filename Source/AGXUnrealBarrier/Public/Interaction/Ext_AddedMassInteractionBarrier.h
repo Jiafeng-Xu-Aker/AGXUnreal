@@ -6,7 +6,7 @@
 #include "UObject/Object.h"
 
 struct FExt_AddedMassInteractionRef;
-class FRigidBodyBarrier;
+struct FRigidBodyBarrier;
 
 /**
  * TODO: add description

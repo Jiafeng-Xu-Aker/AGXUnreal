@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -15,6 +15,7 @@ public: // Names of common resources
 	static const FName AgxIconTiny;
 	static const FName FileIcon;
 	static const FName FileIconSmall;
+	static const FName DebugRenderingIcon;
 	static const FName GrabIcon;
 	static const FName JointIcon;
 	static const FName JointIconSmall;

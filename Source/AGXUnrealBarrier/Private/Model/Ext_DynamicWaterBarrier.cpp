@@ -3,7 +3,7 @@
 #include <agxModel/WindAndWaterController.h>
 
 #include "BarrierOnly/AGXRefs.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 namespace
 {

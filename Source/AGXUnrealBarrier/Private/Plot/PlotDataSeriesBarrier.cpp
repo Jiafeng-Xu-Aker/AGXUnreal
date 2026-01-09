@@ -1,10 +1,10 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Plot/PlotDataSeriesBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 FPlotDataSeriesBarrier::FPlotDataSeriesBarrier()
 	: NativeRef {new FDataSeriesRef}

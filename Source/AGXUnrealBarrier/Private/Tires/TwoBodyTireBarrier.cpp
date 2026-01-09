@@ -1,12 +1,12 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Tires/TwoBodyTireBarrier.h"
 
 // AGX Dynamics for Unreal includes.
-#include "BarrierOnly/AGXRefs.h"
-#include "AGX_LogCategory.h"
 #include "AGX_AgxDynamicsObjectsAccess.h"
-#include "TypeConversions.h"
+#include "AGX_LogCategory.h"
+#include "BarrierOnly/AGXRefs.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "AGXBarrierFactories.h"
 
 // AGX Dynamics includes.

@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Vehicle/AGX_TrackPropertiesAssetTypeActions.h"
 
@@ -22,7 +22,7 @@ FText FAGX_TrackPropertiesAssetTypeActions::GetName() const
 const TArray<FText>& FAGX_TrackPropertiesAssetTypeActions::GetSubMenus() const
 {
 	static const TArray<FText> SubMenus {
-		LOCTEXT("TrackSubMenu", "Track"),
+		LOCTEXT("VehicleSubMenu", "Vehicle"),
 	};
 
 	return SubMenus;

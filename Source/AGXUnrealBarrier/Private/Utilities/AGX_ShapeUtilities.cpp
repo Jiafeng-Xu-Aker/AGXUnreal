@@ -1,9 +1,9 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Utilities/AGX_ShapeUtilities.h"
 
 // AGX Dynamics for Unreal includes.
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 // AGX Dynamics includes.
 #include "BeginAGXIncludes.h"

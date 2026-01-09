@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -10,7 +10,7 @@
 #include "Terrain/AGX_TerrainHeightFetcher.h"
 #include "Terrain/AGX_TerrainPagingSettings.h"
 #include "Terrain/AGX_Shovel.h"
-#include "AGX_ShovelReference.h"
+#include "Terrain/TerrainParticleTypes.h"
 
 // Unreal Engine includes.
 #include "Misc/EngineVersionComparison.h"
@@ -50,7 +50,9 @@
 #include "AGX_Terrain.generated.h"
 
 class UAGX_HeightFieldBoundsComponent;
+class UAGX_SoilParticleRendererComponent;
 class UAGX_TerrainMaterial;
+class UAGX_TerrainProperties;
 class UAGX_TerrainSpriteComponent;
 class UAGX_ShapeMaterial;
 class ALandscape;
@@ -58,27 +60,27 @@ class UNiagaraComponent;
 class UNiagaraSystem;
 
 USTRUCT(BlueprintType)
-struct AGXUNREAL_API FShovelReferenceWithSettings
+struct AGXUNREAL_API FDelegateParticleData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "Terrain")
-	FAGX_ShovelReference Shovel;
+	UPROPERTY(BlueprintReadOnly, Category = "Particle Data")
+	TArray<FVector4> PositionsAndRadii;
 
-	/**
-	 * The max distance from the Shovel at which new Terrain Tiles will be preloaded [cm].
-	 * Only relevant when using Terrain Paging.
-	 */
-	UPROPERTY(EditAnywhere, Category = "Paging Terrain")
-	FAGX_Real PreloadRadius {1000.f};
+	UPROPERTY(BlueprintReadOnly, Category = "Particle Data")
+	TArray<FVector4> VelocitiesAndMasses;
 
-	/**
-	 * The max distance from the Shovel at which new Terrain Tiles is guaranteed to be loaded [cm].
-	 * Only relevant when using Terrain Paging.
-	 */
-	UPROPERTY(EditAnywhere, Category = "Paging Terrain")
-	FAGX_Real RequiredRadius {600.f};
+	UPROPERTY(BlueprintReadOnly, Category = "Particle Data")
+	TArray<FVector4> Orientations;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Particle Data")
+	TArray<bool> Exists;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Particle Data")
+	int32 ParticleCount {0};
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FParticleDataMulticastDelegate, FDelegateParticleData&, ParticleData);
 
 UCLASS(ClassGroup = "AGX_Terrain", Blueprintable, Category = "AGX")
 class AGXUNREAL_API AAGX_Terrain : public AActor
@@ -94,6 +96,9 @@ public:
 
 	UPROPERTY(Category = "AGX Terrain", VisibleAnywhere, BlueprintReadOnly)
 	UAGX_HeightFieldBoundsComponent* TerrainBounds;
+
+	UPROPERTY(Category = "AGX Terrain", VisibleAnywhere, BlueprintReadOnly)
+	UAGX_SoilParticleRendererComponent* DefaultParticleRenderer;
 
 	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
 	bool bCanCollide {true};
@@ -120,44 +125,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
 	ALandscape* SourceLandscape;
 
-	/** Whether the native terrain should generate particles or not during shovel interactions. */
-	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
-	bool bCreateParticles = true;
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	void SetCreateParticles(bool CreateParticles);
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	bool GetCreateParticles() const;
-
-	/**
-	 * Whether the native terrain simulation should auto-delete particles that are out of bounds.
-	 *
-	 * Cannot be combined with Terrain Paging.
-	 */
-	UPROPERTY(
-		EditAnywhere, Category = "AGX Terrain", Meta = (EditCondition = "!bEnableTerrainPaging"))
-	bool bDeleteParticlesOutsideBounds = false;
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	void SetDeleteParticlesOutsideBounds(bool DeleteParticlesOutsideBounds);
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	bool GetDeleteParticlesOutsideBounds() const;
-
-	/**
-	 * Scales the penetration force with the shovel velocity squared in the cutting
-	 * direction according to: ( 1.0 + C * v^2 ).
-	 */
-	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
-	FAGX_Real PenetrationForceVelocityScaling = 0.0f;
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	void SetPenetrationForceVelocityScaling(double InPenetrationForceVelocityScaling);
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	double GetPenetrationForceVelocityScaling() const;
-
 	/**
 	 * The maximum depth of the terrain, from local origin [cm].
 	 * Should at least be deeper than the lowest height of the initial Landscape. Note that depth is
@@ -170,16 +137,14 @@ public:
 	FAGX_Real MaxDepth = 200.0f;
 
 	/**
-	 * Sets the maximum volume of active zone wedges that should wake particles [cm^3].
-	 */
-	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
-	FAGX_Real MaximumParticleActivationVolume = std::numeric_limits<double>::infinity();
+	* Properties that define the behavior of this Terrain.
+	* If left unspecified, default Terrain properties will be used.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AGX Terrain")
+	UAGX_TerrainProperties* TerrainProperties;
 
 	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	void SetMaximumParticleActivationVolume(double InMaximumParticleActivationVolume);
-
-	UFUNCTION(BlueprintCallable, Category = "AGX Terrain")
-	double GetMaximumParticleActivationVolume() const;
+	bool SetTerrainProperties(UAGX_TerrainProperties* InTerrainProperties);
 
 	/** The physical bulk, compaction, particle and surface properties of the Terrain. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AGX Terrain")
@@ -244,11 +209,10 @@ public:
 	 */
 	UPROPERTY(
 		EditAnywhere, Category = "AGX Terrain",
-		Meta = (DeprecatedProperty, DeprecationMessage = "Use Shovel Components instead."))
+		Meta =
+			(DeprecatedProperty, DeprecationMessage = "Use Shovel Components instead.",
+			 DisplayName = "Shovels [Deprecated]"))
 	TArray<FAGX_Shovel> Shovels;
-
-	UPROPERTY(EditAnywhere, Category = "AGX Terrain")
-	TArray<FShovelReferenceWithSettings> ShovelComponents;
 
 	UFUNCTION(BlueprintCallable, Category = "Shovel Properties")
 	bool SetPreloadRadius(UAGX_ShovelComponent* Shovel, double InPreloadRadius);
@@ -283,26 +247,6 @@ public:
 		EditAnywhere, Category = "AGX Terrain Rendering",
 		Meta = (EditCondition = "bEnableDisplacementRendering"))
 	UTextureRenderTarget2D* LandscapeDisplacementMap;
-
-	/** Whether soil particles should be rendered or not. */
-	UPROPERTY(EditAnywhere, Category = "AGX Terrain Rendering")
-	bool bEnableParticleRendering = true;
-
-	/**
-	 * Rough estimation of number of particles that will exist at once. Should not be too low,
-	 * or some particles might not be rendered.
-	 */
-	UPROPERTY(
-		EditAnywhere, Category = "AGX Terrain Rendering",
-		Meta =
-			(EditCondition = "bEnableParticleRendering", ClampMin = "1", UIMin = "1",
-			 UIMax = "4096"))
-	int32 MaxNumRenderParticles = 2048;
-
-	UPROPERTY(
-		EditAnywhere, Category = "AGX Terrain Rendering",
-		Meta = (EditCondition = "bEnableParticleRendering"))
-	UNiagaraSystem* ParticleSystemAsset;
 
 	/** Whether shovel active zone should be rendered or not. */
 	UPROPERTY(EditAnywhere, Category = "AGX Terrain Debug Rendering")
@@ -346,6 +290,9 @@ public:
 	FTerrainPagerBarrier* GetNativeTerrainPager();
 	const FTerrainPagerBarrier* GetNativeTerrainPager() const;
 
+	UPROPERTY(BlueprintAssignable, Category = "AGX Terrain Particles")
+	FParticleDataMulticastDelegate OnParticleData;
+
 #if WITH_EDITOR
 	virtual void PostInitProperties() override;
 	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent& Event) override;
@@ -365,6 +312,7 @@ private:
 	void CreateNativeShovels();
 	void AddTerrainPagerBodies();
 	bool UpdateNativeTerrainMaterial();
+	bool UpdateNativeTerrainProperties();
 	bool UpdateNativeShapeMaterial();
 
 	void InitializeRendering();
@@ -372,53 +320,50 @@ private:
 	void UpdateLandscapeMaterialParameters();
 	void UpdateDisplacementMap();
 	void ClearDisplacementMap();
-	bool InitializeParticleSystem();
-	bool InitializeParticleSystemComponent();
 	void UpdateParticlesArrays();
 #if WITH_EDITOR
 	void InitPropertyDispatcher();
+	virtual void PostLoad() override;
 #endif
 	virtual void Serialize(FArchive& Archive) override;
 
 	friend class FAGX_TerrainHeightFetcher;
 
-private: // Deprecated functions.
-
-	// clang-format off
-
-	UFUNCTION(
-		BlueprintCallable, Category = "AGX Terrain",
-		Meta =
-			(DeprecatedFunction,
-			 DeprecationMessage = "Use SetPenetrationForceVelocityScaling instead of SetPenetrationForceVelocityScaling_BP"))
-	void SetPenetrationForceVelocityScaling_BP(float InPenetrationForceVelocityScaling);
-
-
-	UFUNCTION(
-		BlueprintCallable, Category = "AGX Terrain",
-		Meta =
-			(DeprecatedFunction,
-			 DeprecationMessage =
-				"Use GetPenetrationForceVelocityScaling instead of GetPenetrationForceVelocityScaling_BP"))
-	float GetPenetrationForceVelocityScaling_BP() const;
-
-	UFUNCTION(
-		BlueprintCallable, Category = "AGX Terrain",
-		Meta = (
-			DeprecatedFunction,
-			DeprecationMessage = "Use SetMaximumParticleActivationVolume instead of SetMaximumParticleActivationVolume_BP"))
-	void SetMaximumParticleActivationVolume_BP(float InMaximumParticleActivationVolume);
-
-	UFUNCTION(
-		BlueprintCallable, Category = "AGX Terrain",
-		Meta = (
-			DeprecatedFunction,
-			DeprecationMessage = "Use GetMaximumParticleActivationVolume instead of GetMaximumParticleActivationVolume_BP"))
-	float GetMaximumParticleActivationVolume_BP() const;
-
-	// clang-format on
-
 private:
+	UPROPERTY(Transient)
+	bool bNeedsShapeMaterialWarning {false};
+
+	UPROPERTY()
+	bool bCreateParticles_DEPRECATED {true};
+
+	UPROPERTY()
+	bool bDeleteParticlesOutsideBounds_DEPRECATED = false;
+
+	UPROPERTY()
+	FAGX_Real PenetrationForceVelocityScaling_DEPRECATED = 0.0f;
+
+	UPROPERTY()
+	FAGX_Real MaximumParticleActivationVolume_DEPRECATED = std::numeric_limits<double>::infinity();
+
+	UPROPERTY()
+	float SoilParticleSizeScaling_DEPRECATED {1.f};
+
+	UPROPERTY()
+	TArray<FShovelReferenceWithSettings> ShovelComponents_DEPRECATED;
+
+	/// Deprecated, see UAGX_SoilParticleRendererComponent.
+	UPROPERTY()
+	bool bEnableParticleRendering_DEPRECATED {true};
+
+	/// Deprecated, see UAGX_SoilParticleRendererComponent.
+	UPROPERTY()
+	UNiagaraSystem* ParticleSystemAsset_DEPRECATED;
+
+
+#if WITH_EDITOR
+	void ShowShapeMaterialWarning() const;
+#endif
+
 	/**
 	 * Even if Terrain paging is enabled, and this Terrain has a NativeTerrainPagerBarrier, it will
 	 * also have a regular NativeBarrier agx::Terrain that will in that case be used as a template
@@ -441,9 +386,6 @@ private:
 	int32 NumVerticesY = 0;
 	bool DisplacementMapInitialized = false;
 
-	// Particle related variables.
-	UNiagaraComponent* ParticleSystemComponent = nullptr;
-
 	/**
 	 * Thread safe convenience function for reading heights from the source Landscape.
 	 * The WorldPosStart is projected onto the Landscape and acts as the starting point (corner) of
@@ -458,4 +400,6 @@ private:
 		const FVector& WorldPosStart, int32 VertsX, int32 VertsY, TArray<float>& OutHeights);
 
 	FTransform GetNativeTransform() const;
+
+	UAGX_TerrainProperties* GetOrCreateTerrainPropertiesForOldTerrain();
 };

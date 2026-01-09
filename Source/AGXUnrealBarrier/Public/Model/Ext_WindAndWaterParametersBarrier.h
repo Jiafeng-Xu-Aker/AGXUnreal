@@ -10,7 +10,7 @@
 
 enum class EAGX_Ext_WindAndWaterParametersCoefficient : uint8;
 enum class EAGX_Ext_WindAndWaterShapeTessellation : uint8;
-class FRigidBodyBarrier;
+struct FRigidBodyBarrier;
 class FExt_WindAndWaterControllerBarrier;
 struct FExt_WindAndWaterParametersRef;
 

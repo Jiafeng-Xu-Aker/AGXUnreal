@@ -1,10 +1,10 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Wire/WireParameterControllerBarrier.h"
 
 // AGX Dynamics for Unreal includes.
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "BarrierOnly/Wire/WireParameterControllerPtr.h"
-#include "TypeConversions.h"
 
 FWireParameterControllerBarrier::FWireParameterControllerBarrier()
 	: NativePtr {new FWireParameterControllerPtr()}

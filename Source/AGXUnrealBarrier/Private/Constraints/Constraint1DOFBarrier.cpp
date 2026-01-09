@@ -1,12 +1,12 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Constraints/Constraint1DOFBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "Constraints/ControllerConstraintBarriers.h"
 #include "RigidBodyBarrier.h"
-#include "TypeConversions.h"
 #include "Utilities/AGX_BarrierConstraintUtilities.h"
 
 // Standard library includes.

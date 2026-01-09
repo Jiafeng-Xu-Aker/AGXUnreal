@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Sensors/AGX_LidarSensorComponentCustomization.h"
 
@@ -44,6 +44,9 @@ void FAGX_LidarSensorComponentCustomization::CustomizeDetails(IDetailLayoutBuild
 	// Hide the default Model widget, we will create a custom one for it.
 	InDetailBuilder.HideProperty(
 		InDetailBuilder.GetProperty(GET_MEMBER_NAME_CHECKED(UAGX_LidarSensorComponent, Model)));
+
+	// Ensure high priority for base class Category.
+	InDetailBuilder.EditCategory("AGX Sensor", FText::GetEmpty(), ECategoryPriority::Important);
 
 	IDetailCategoryBuilder& CategoryBuilder =
 		InDetailBuilder.EditCategory("AGX Lidar", FText::GetEmpty(), ECategoryPriority::Important);
@@ -271,7 +274,7 @@ FReply FAGX_LidarSensorComponentCustomization::OnCreateModelParametersAssetButto
 
 	Lidar->ModelParameters = ModelParametersAsset;
 
-	FAGX_NotificationUtilities::ShowDialogBoxWithLogLog(
+	FAGX_NotificationUtilities::ShowDialogBoxWithSuccess(
 		FString::Printf(TEXT("Successfully saved: '%s'"), *ModelParametersAsset->GetName()));
 
 	return FReply::Handled();

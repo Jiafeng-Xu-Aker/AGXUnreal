@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -19,6 +19,9 @@ struct AGXUNREAL_API FAGX_TerrainBulkProperties
 	GENERATED_BODY()
 
 public:
+
+	bool operator==(const FAGX_TerrainBulkProperties& Other) const = default;
+
 	/**
 	 * Sets the adhesion overlap factor of the bulk material, i.e what fraction of the particle
 	 * radius is allowed to overlap to simulate adhesion.

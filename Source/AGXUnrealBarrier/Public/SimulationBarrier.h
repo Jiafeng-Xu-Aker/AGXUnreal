@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -17,28 +17,35 @@
 
 class FExt_AddedMassInteractionBarrier;
 class FExt_WindAndWaterControllerBarrier;
-struct FSimulationRef;
-
-class FRigidBodyBarrier;
 class FConstraintBarrier;
 class FContactMaterialBarrier;
-class FShapeBarrier;
 class FShapeMaterialBarrier;
+class FShovelBarrier;
 class FTerrainBarrier;
 class FTerrainPagerBarrier;
 class FTireBarrier;
+class FTrackBarrier;
 class FWireBarrier;
 class FExt_AddedMassInteractionBarrier;
 class FExt_WindAndWaterControllerBarrier;
+
+struct FObserverFrameBarrier;
+struct FRigidBodyBarrier;
+struct FShapeBarrier;
+struct FSimulationRef;
+struct FSteeringBarrier;
 
 class AGXUNREALBARRIER_API FSimulationBarrier
 {
 public:
 	FSimulationBarrier();
+	FSimulationBarrier(std::unique_ptr<FSimulationRef> Native);
+	FSimulationBarrier(FSimulationBarrier&& Other);
 	~FSimulationBarrier();
 
 	bool Add(FConstraintBarrier& Constraint);
 	bool Add(FContactMaterialBarrier& ContactMaterial);
+	bool Add(FObserverFrameBarrier& Frame);
 
 	/**
 	 * Note that Shapes that are child of the passed Rigid Body are NOT added to the simulation
@@ -49,14 +56,18 @@ public:
 	bool Add(FRigidBodyBarrier& Body);
 	bool Add(FShapeBarrier& Shape);
 	bool Add(FShapeMaterialBarrier& Material);
+	bool Add(FShovelBarrier& Shovel);
+	bool Add(FSteeringBarrier& Steering);
 	bool Add(FTerrainBarrier& Terrain);
 	bool Add(FTerrainPagerBarrier& Terrain);
 	bool Add(FTireBarrier& Tire);
+	bool Add(FTrackBarrier& Track);
 	bool Add(FWireBarrier& Wire);
 	bool Add(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
 	bool Add(FExt_AddedMassInteractionBarrier& AddedMassInteractionbarrier);
 	bool Remove(FConstraintBarrier& Constraint);
 	bool Remove(FContactMaterialBarrier& ContactMaterial);
+	bool Remove(FObserverFrameBarrier& Frame);
 
 	/**
 	 * Note that agx::Simulation::remove(agx::RigidBody*, bool) is called with RemoveGeometries =
@@ -65,9 +76,12 @@ public:
 	bool Remove(FRigidBodyBarrier& Body);
 	bool Remove(FShapeBarrier& Shape);
 	bool Remove(FShapeMaterialBarrier& Material);
+	bool Remove(FShovelBarrier& Shovel);
+	bool Remove(FSteeringBarrier& Steering);
 	bool Remove(FTerrainBarrier& Terrain);
 	bool Remove(FTerrainPagerBarrier& Terrain);
 	bool Remove(FTireBarrier& Tire);
+	bool Remove(FTrackBarrier& Track);
 	bool Remove(FWireBarrier& Wire);
 	bool Remove(FExt_WindAndWaterControllerBarrier& WindAnWaterController);
 	bool Remove(FExt_AddedMassInteractionBarrier& AddedMassInteraction);
@@ -77,6 +91,7 @@ public:
 
 	bool WriteAGXArchive(const FString& Filename) const;
 
+	void SetEnableWebDebugger(bool Enabled, uint16 Port);
 	void EnableRemoteDebugging(int16 Port);
 
 	void SetEnableAMOR(bool bEnable);

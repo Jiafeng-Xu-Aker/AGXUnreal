@@ -1,11 +1,13 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "AGX_TopMenu.h"
 
 // AGX Dynamics for Unreal includes.
 #include "AGX_EditorStyle.h"
+#include "AGX_Environment.h"
 #include "AGX_LogCategory.h"
 #include "AGX_RigidBodyComponent.h"
+#include "AGX_Simulation.h"
 #include "AgxEdMode/AGX_AgxEdModeFile.h"
 #include "AgxEdMode/AGX_GrabMode.h"
 #include "AGXUnrealEditor.h"
@@ -17,7 +19,6 @@
 #include "Constraints/AGX_LockConstraintActor.h"
 #include "Constraints/AGX_PrismaticConstraintActor.h"
 #include "Utilities/AGX_EditorUtilities.h"
-#include "AGX_Environment.h"
 #include "Utilities/AGX_NotificationUtilities.h"
 #include "Widgets/AGX_GenerateRuntimeActivationDialog.h"
 #include "Widgets/AGX_LicenseDialog.h"
@@ -158,15 +159,18 @@ FAGX_TopMenu::~FAGX_TopMenu()
 /*virtual*/ void FAGX_TopMenu::FillTopMenu(FMenuBuilder& Builder)
 {
 	{
+		FText FileMenuTooltip;
+
+		FileMenuTooltip = LOCTEXT(
+			"FileMenuTooltip",
+			"Interoperability with external file formats, such AGX Dynamics files (.agx), OpenPLX "
+			"(.openplx) or URDF (.urdf) files.");
+
 		const FSlateIcon FileIcon(
 			FAGX_EditorStyle::GetStyleSetName(), FAGX_EditorStyle::FileIconSmall,
 			FAGX_EditorStyle::FileIconSmall);
 		Builder.AddSubMenu(
-			LOCTEXT("FileMenuLabel", "File"),
-			LOCTEXT(
-				"FileMenuTooltip",
-				"Interoperability with external file formats, such AGX Dynamics files (.agx) "
-				"or URDF files (.urdf)."),
+			LOCTEXT("FileMenuLabel", "File"), FileMenuTooltip,
 			FNewMenuDelegate::CreateRaw(this, &FAGX_TopMenu::FillFileMenu), false, FileIcon);
 	}
 
@@ -208,6 +212,20 @@ FAGX_TopMenu::~FAGX_TopMenu()
 				"Activate/Deactivate the Grab mode, making it possible to grab a "
 				"Rigid Body in the Level by clicking and dragging the mouse in the viewport."),
 			FNewMenuDelegate::CreateRaw(this, &FAGX_TopMenu::FillGrabModeMenu), false, GrabIcon);
+	}
+
+	Builder.AddMenuSeparator();
+
+	{
+		const FSlateIcon DebugIcon(
+			FAGX_EditorStyle::GetStyleSetName(), FAGX_EditorStyle::DebugRenderingIcon,
+			FAGX_EditorStyle::DebugRenderingIcon);
+		Builder.AddSubMenu(
+			LOCTEXT("DebuggingMenuLabel", "Debugging"),
+			LOCTEXT(
+				"DebuggingMenuTooltip",
+				"Manage Debugging features."),
+			FNewMenuDelegate::CreateRaw(this, &FAGX_TopMenu::FillDebuggingMenu), false, DebugIcon);
 	}
 
 	Builder.AddMenuSeparator();
@@ -263,7 +281,8 @@ void FAGX_TopMenu::FillConstraintMenu(FMenuBuilder& Builder)
 			"CreateCylindricalConstraintTooltip",
 			"Create Cylindrical Constraint. \n\nInitially setup using currently selected Rigid "
 			"Body Actors, or empty."),
-		[&]() {
+		[&]()
+		{
 			FAGX_TopMenu::OnCreateConstraintClicked(AAGX_CylindricalConstraintActor::StaticClass());
 		});
 
@@ -306,12 +325,14 @@ void FAGX_TopMenu::FillConstraintMenu(FMenuBuilder& Builder)
 
 void FAGX_TopMenu::FillFileMenu(FMenuBuilder& Builder)
 {
+	FText FileMenuTooltip;
+	FileMenuTooltip = LOCTEXT(
+		"FileMenuEntryhTooltopImportBluePrint",
+		"Import an AGX Dynamics archive, OpenPLX or URDF file to a Blueprint.");
+
 	AddFileMenuEntry(
-		Builder, LOCTEXT("FileMEnuEntryLabelImportBluePrint", "Import model to Blueprint..."),
-		LOCTEXT(
-			"FileMenuEntryhTooltopImportBluePrint",
-			"Import an AGX Dynamics archive or URDF to a Blueprint."),
-		[]() { UAGX_AgxEdModeFile::ImportToBlueprint(); });
+		Builder, LOCTEXT("FileMEnuEntryLabelImportBluePrint", "Import Model to Blueprint..."),
+		FileMenuTooltip, []() { UAGX_AgxEdModeFile::ImportToBlueprint(); });
 
 	// Export AGX Archive menu item
 	AddFileMenuEntry(
@@ -364,6 +385,21 @@ void FAGX_TopMenu::FillGrabModeMenu(FMenuBuilder& Builder)
 		[&]() { FAGX_TopMenu::OnStopGrabModeDialogClicked(); });
 }
 
+void FAGX_TopMenu::FillDebuggingMenu(FMenuBuilder& Builder)
+{
+	AddFileMenuEntry(
+		Builder, LOCTEXT("ToggleWebDebuggerLabel", "Toggle Web Debugger"),
+		LOCTEXT("ToggleWebDebuggerToolTip", "Enable or disable the AGX Web Debugger."),
+		[&]() { FAGX_TopMenu::OnToggleWebDebuggerClicked(); });
+
+	AddFileMenuEntry(
+		Builder, LOCTEXT("ToggleDrawShapeContactsLabel", "Toggle Draw Shape Contacts"),
+		LOCTEXT(
+			"ToggleDrawShapeContactsToolTip",
+			"Enable or disable drawing of shape contacts in the viewport."),
+		[&]() { FAGX_TopMenu::OnToggleDrawShapeContactsClicked(); });
+}
+
 void FAGX_TopMenu::OnCreateConstraintClicked(UClass* ConstraintClass)
 {
 	AActor* Actor1 = nullptr;
@@ -374,7 +410,7 @@ void FAGX_TopMenu::OnCreateConstraintClicked(UClass* ConstraintClass)
 
 	if (Actor1 == nullptr)
 	{
-		FAGX_NotificationUtilities::ShowDialogBoxWithErrorLog(
+		FAGX_NotificationUtilities::ShowDialogBoxWithError(
 			"Must select at least one actor with a Rigid Body component before creating a "
 			"constraint.");
 		return;
@@ -393,7 +429,7 @@ void FAGX_TopMenu::OnCreateConstraintClicked(UClass* ConstraintClass)
 
 	if (Bodies1.Num() != 1)
 	{
-		FAGX_NotificationUtilities::ShowDialogBoxWithErrorLog(
+		FAGX_NotificationUtilities::ShowDialogBoxWithError(
 			"Cannot create constraint with actor '%s' because it doesn't contain exactly one "
 			"body.");
 		return;
@@ -401,7 +437,7 @@ void FAGX_TopMenu::OnCreateConstraintClicked(UClass* ConstraintClass)
 
 	if (Actor2 && Bodies2.Num() != 1)
 	{
-		FAGX_NotificationUtilities::ShowDialogBoxWithErrorLog(
+		FAGX_NotificationUtilities::ShowDialogBoxWithError(
 			"Cannot create constraint with actor '%s' because it doesn't contain exactly one "
 			"body.");
 		return;
@@ -470,12 +506,13 @@ void FAGX_TopMenu::OnOpenAboutDialogClicked()
 		"Revision: " + FAGX_Environment::GetPluginRevision() + "\n"
 		"\n"
 		"AGX Dynamics version: " + FAGX_Environment::GetAGXDynamicsVersion() + "\n"
+		"OpenPLX version: " + FAGX_Environment::GetOpenPLXVersion() + "\n"
 		+ LicenseText + "\n"
 		"Copyright Algoryx Simulation AB\n"
 		"www.algoryx.com");
 	// clang-format on
 
-	FAGX_NotificationUtilities::ShowDialogBoxWithLogLog(Message, Title);
+	FAGX_NotificationUtilities::ShowDialogBoxWithInfo(Message, Title);
 }
 
 void FAGX_TopMenu::OnOpenLicenseActivationDialogClicked()
@@ -530,7 +567,7 @@ void FAGX_TopMenu::OnStartGrabModeDialogClicked()
 
 	if (!World->IsGameWorld())
 	{
-		FAGX_NotificationUtilities::ShowDialogBoxWithErrorLog(
+		FAGX_NotificationUtilities::ShowDialogBoxWithError(
 			"Grab mode if only supported during play.");
 		return;
 	}
@@ -541,6 +578,46 @@ void FAGX_TopMenu::OnStartGrabModeDialogClicked()
 void FAGX_TopMenu::OnStopGrabModeDialogClicked()
 {
 	FAGX_GrabMode::Deactivate();
+}
+
+void FAGX_TopMenu::OnToggleWebDebuggerClicked()
+{
+	UWorld* World = FAGX_EditorUtilities::GetCurrentWorld();
+	if (World == nullptr || !World->IsGameWorld())
+	{
+		FAGX_NotificationUtilities::ShowNotification(
+			"Web Debugger can only be toggled during Play.", SNotificationItem::CS_Fail);
+		return;
+	}
+
+	UAGX_Simulation* Sim = UAGX_Simulation::GetFrom(World);
+	if (Sim->IsWebDebuggingActive())
+		Sim->StopWebDebugging();
+	else
+		Sim->StartWebDebugging(/*OpenBrowser*/ true);
+
+	const TCHAR* State = Sim->IsWebDebuggingActive() ? TEXT("ON") : TEXT("OFF");
+	FAGX_NotificationUtilities::ShowNotification(
+		FString::Printf(TEXT("Web debugging is %s."), State), SNotificationItem::CS_Success,
+		3.f);
+}
+
+void FAGX_TopMenu::OnToggleDrawShapeContactsClicked()
+{
+	UWorld* World = FAGX_EditorUtilities::GetCurrentWorld();
+	if (World == nullptr || !World->IsGameWorld())
+	{
+		FAGX_NotificationUtilities::ShowNotification(
+			"Web Debugger can only be toggled during Play.", SNotificationItem::CS_Fail);
+		return;
+	}
+
+	UAGX_Simulation* Sim = UAGX_Simulation::GetFrom(World);
+	Sim->bDrawShapeContacts = !Sim->bDrawShapeContacts;
+
+	const TCHAR* State = Sim->bDrawShapeContacts ? TEXT("ON") : TEXT("OFF");
+	FAGX_NotificationUtilities::ShowNotification(
+		FString::Printf(TEXT("Draw Shape Contacts is %s."), State), SNotificationItem::CS_Success, 3.f);
 }
 
 #undef LOCTEXT_NAMESPACE

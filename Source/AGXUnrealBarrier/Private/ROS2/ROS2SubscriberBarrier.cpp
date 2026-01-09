@@ -1,13 +1,13 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "ROS2/ROS2SubscriberBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "AGX_LogCategory.h"
 #include "AGXROS2Types.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "ROS2/AGX_ROS2Messages.h"
 #include "ROS2/ROS2Conversions.h"
-#include "TypeConversions.h"
 #include "Utilities/ROS2Utilities.h"
 
 // AGX Dynamics includes.

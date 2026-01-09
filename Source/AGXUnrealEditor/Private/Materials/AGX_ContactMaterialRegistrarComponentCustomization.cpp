@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Materials/AGX_ContactMaterialRegistrarComponentCustomization.h"
 
@@ -16,7 +16,7 @@ void FAGX_ContactMaterialRegistrarComponentCustomization::CustomizeDetails(
 	IDetailLayoutBuilder& DetailBuilder)
 {
 	DetailBuilder.EditCategory(
-		"AGX Contact Material Registrar", FText::GetEmpty(), ECategoryPriority::Variable);
+		"AGX Contact Material Registrar", FText::GetEmpty(), ECategoryPriority::Important);
 }
 
 #undef LOCTEXT_NAMESPACE

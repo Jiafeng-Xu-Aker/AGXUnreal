@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -37,6 +37,9 @@ public:
 	FString GetName() const;
 
 	void ReleaseNative();
+
+	void SetNativeAddress(uintptr_t NativeAddress);
+	uintptr_t GetNativeAddress() const;
 
 	FGuid GetGuid() const;
 

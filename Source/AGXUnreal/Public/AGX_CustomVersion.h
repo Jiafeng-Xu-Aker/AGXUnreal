@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -58,6 +58,24 @@ struct AGXUNREAL_API FAGX_CustomVersion
 		// In Model Source Component, associate render data Static Mesh Components with a Shape
 		// instead of a Render Data since the same Render Data can be used by many Shapes.
 		RenderDataPerShape,
+
+		// Runtime Import support added, where the Import and Reimport pipeline was refactored
+		// completely.
+		RuntimeImportSupport,
+
+		// Shovels in AGX uses ToothDirection and ToothLength instead of CuttingDirection.
+		ShovelUsesToothDirection,
+
+		// Shovel Component adds itself to the Simulation instead of the Terrain doing that.
+		ShovelComponentAddsSelf,
+
+		// TerrainProperties Asset introduced, to hold Terrain Properties for the AGX Terrain.
+		TerrainPropertiesAsset,
+
+		// Particle rendering is performed by specialized rendering Components, either built-in in
+		// AGX Dynamics for Unreal or provided by a user. AGX Terrain does not render particles
+		// created by it, anymore, and instead uses one or several rendering Components to do that.
+		ParticleRenderingByRenderingComponents,
 
 		// <----- New versions can be added above this line. ----->
 		VersionPlusOne,

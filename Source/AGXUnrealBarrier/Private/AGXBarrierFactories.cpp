@@ -1,13 +1,16 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "AGXBarrierFactories.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
 #include "BarrierOnly/Contacts/ShapeContactEntity.h"
+#include "BarrierOnly/Vehicle/SteeringRef.h"
 #include "BarrierOnly/Vehicle/TrackRef.h"
 #include "Contacts/ContactPointEntity.h"
 #include "Terrain/TerrainBarrier.h"
+#include "Vehicle/SteeringBarrier.h"
+#include "Vehicle/WheelJointBarrier.h"
 
 // AGX Dynamics includes.
 #include "BeginAGXIncludes.h"
@@ -18,14 +21,18 @@
 #include <agx/CylindricalJoint.h>
 #include <agx/DistanceJoint.h>
 #include <agx/LockJoint.h>
+#include <agx/SingleControllerConstraint1DOF.h>
 #include <agxCollide/Contacts.h>
 #include <agxCollide/Sphere.h>
 #include <agxCollide/Box.h>
 #include <agxCollide/Trimesh.h>
 #include <agxModel/TwoBodyTire.h>
+#include <agxSDK/Simulation.h>
 #include <agxSensor/RaytraceAmbientMaterial.h>
 #include <agxTerrain/Shovel.h>
 #include <agxTerrain/TerrainMaterial.h>
+#include <agxVehicle/Steering.h>
+#include <agxVehicle/WheelJoint.h>
 #include <agxWire/Wire.h>
 #include <agxWire/Node.h>
 #include <agxWire/WireWinchController.h>
@@ -36,6 +43,11 @@
 FRigidBodyBarrier AGXBarrierFactories::CreateRigidBodyBarrier(agx::RigidBody* Body)
 {
 	return {std::make_unique<FRigidBodyRef>(Body)};
+}
+
+FSimulationBarrier AGXBarrierFactories::CreateSimulationBarrier(agxSDK::Simulation* Simulation)
+{
+	return FSimulationBarrier(std::make_unique<FSimulationRef>(Simulation));
 }
 
 FAnyShapeBarrier AGXBarrierFactories::CreateAnyShapeBarrier(agxCollide::Shape* Shape)
@@ -104,6 +116,18 @@ FDistanceJointBarrier AGXBarrierFactories::CreateDistanceJointBarrier(
 FLockJointBarrier AGXBarrierFactories::CreateLockJointBarrier(agx::LockJoint* LockJoint)
 {
 	return {std::make_unique<FConstraintRef>(LockJoint)};
+}
+
+FSingleControllerConstraint1DOFBarrier
+AGXBarrierFactories::CreateSingleControllerConstraint1DOFBarrier(
+	agx::SingleControllerConstraint1DOF* Constraint)
+{
+	return {std::make_unique<FConstraintRef>(Constraint)};
+}
+
+FWheelJointBarrier AGXBarrierFactories::CreateWheelJointBarrier(agxVehicle::WheelJoint* WJ)
+{
+	return {std::make_unique<FConstraintRef>(WJ)};
 }
 
 FTwistRangeControllerBarrier AGXBarrierFactories::CreateTwistRangeControllerBarrier(
@@ -177,6 +201,11 @@ FWireWinchBarrier AGXBarrierFactories::CreateWireWinchBarrier(agxWire::WireWinch
 FShovelBarrier AGXBarrierFactories::CreateShovelBarrier(agxTerrain::Shovel* Shovel)
 {
 	return {std::make_unique<FShovelRef>(Shovel)};
+}
+
+FSteeringBarrier AGXBarrierFactories::CreateSteeringBarrier(agxVehicle::Steering* Steering)
+{
+	return {std::make_shared<FSteeringRef>(Steering)};
 }
 
 FTrackBarrier AGXBarrierFactories::CreateTrackBarrier(agxVehicle::Track* Track)

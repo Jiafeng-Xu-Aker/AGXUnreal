@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #pragma once
 
@@ -30,6 +30,8 @@ private:
 
 	void FillGrabModeMenu(FMenuBuilder& Builder);
 
+	void FillDebuggingMenu(FMenuBuilder& Builder);
+
 	template <typename Function>
 	void AddFileMenuEntry(
 		FMenuBuilder& Builder, const FText& Label, const FText& Tooltip,
@@ -46,6 +48,9 @@ private:
 
 	void OnStartGrabModeDialogClicked();
 	void OnStopGrabModeDialogClicked();
+
+	void OnToggleWebDebuggerClicked();
+	void OnToggleDrawShapeContactsClicked();
 
 	TSharedPtr<class FExtender> Extender;
 	TSharedPtr<const class FExtensionBase> UnrealMenuBarExtension;

@@ -1,13 +1,13 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Plot/PlotBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "AGX_LogCategory.h"
 #include "BarrierOnly/AGXRefs.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "Plot/PlotDataSeriesBarrier.h"
 #include "SimulationBarrier.h"
-#include "TypeConversions.h"
 
 // AGX Dynamics includes.
 #include "BeginAGXIncludes.h"

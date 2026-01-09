@@ -14,7 +14,7 @@
 class FExt_WaterFlowGeneratorBarrier;
 class FExt_DynamicWaterBarrier;
 class FWireBarrier;
-class FShapeBarrier;
+struct FShapeBarrier;
 struct FExt_WindAndWaterControllerRef;
 struct FGeometryRef;
 

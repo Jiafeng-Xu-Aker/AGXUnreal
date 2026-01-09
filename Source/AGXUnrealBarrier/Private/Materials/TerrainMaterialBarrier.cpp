@@ -1,10 +1,10 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Materials/TerrainMaterialBarrier.h"
 
 // AGX Dynamics for Unreal includes.
 #include "BarrierOnly/AGXRefs.h"
-#include "TypeConversions.h"
+#include "BarrierOnly/AGXTypeConversions.h"
 
 // AGX Dynamics includes.
 #include "BeginAGXIncludes.h"
@@ -507,6 +507,20 @@ double FTerrainMaterialBarrier::GetDepthIncreaseFactor() const
 {
 	check(HasNative());
 	return NativeRef->Native->getExcavationContactProperties()->getDepthIncreaseFactor();
+}
+
+void FTerrainMaterialBarrier::SetDepthAngleThreshold(double DepthAngleThreshold)
+{
+	check(HasNative());
+	NativeRef->Native->getExcavationContactProperties()->setDepthAngleThreshold(
+		ConvertAngleToAGX(DepthAngleThreshold));
+}
+
+double FTerrainMaterialBarrier::GetDepthAngleThreshold() const
+{
+	check(HasNative());
+	return ConvertAngleToUnreal<double>(
+		NativeRef->Native->getExcavationContactProperties()->getDepthAngleThreshold());
 }
 
 void FTerrainMaterialBarrier::SetMaximumAggregateNormalForce(double MaximumAggregateNormalForce)

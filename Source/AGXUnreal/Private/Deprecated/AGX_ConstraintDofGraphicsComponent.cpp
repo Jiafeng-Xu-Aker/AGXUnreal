@@ -1,4 +1,4 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 /*
  * Deprecated: see internal issue 739.
@@ -35,6 +35,7 @@
 #include "RenderingThread.h"
 #include "RenderResource.h"
 #include "SceneInterface.h"
+#include "SceneView.h"
 #include "StaticMeshResources.h"
 #include "UObject/ConstructorHelpers.h"
 #include "VertexFactory.h"
@@ -139,7 +140,11 @@ public:
 	FAGX_ConstraintDofGraphicsProxy(UAGX_ConstraintDofGraphicsComponent* Component)
 		: FPrimitiveSceneProxy(Component)
 		, ViolatedMaterial(Component->GetViolatedMaterial())
+#if UE_VERSION_OLDER_THAN(5, 7, 0)
 		, MaterialRelevance(Component->GetMaterialRelevance(GetScene().GetFeatureLevel()))
+#else
+		, MaterialRelevance(Component->GetMaterialRelevance(GetScene().GetShaderPlatform()))
+#endif
 		, bDrawOnlyIfSelected(true)
 		, Constraint(Component->Constraint)
 		, LockedDofs(Component->Constraint->GetLockedDofsBitmask())
@@ -567,9 +572,8 @@ private:
 					/// proper value.
 					bool Unknown = false;
 					DynamicPrimitiveUniformBuffer.Set(
-						Collector.GetRHICommandList(),
-						EffectiveLocalToWorld, EffectiveLocalToWorld, GetBounds(), GetLocalBounds(),
-						true, false, Unknown);
+						Collector.GetRHICommandList(), EffectiveLocalToWorld, EffectiveLocalToWorld,
+						GetBounds(), GetLocalBounds(), true, false, Unknown);
 #endif
 					BatchElement.PrimitiveUniformBufferResource =
 						&DynamicPrimitiveUniformBuffer.UniformBuffer;

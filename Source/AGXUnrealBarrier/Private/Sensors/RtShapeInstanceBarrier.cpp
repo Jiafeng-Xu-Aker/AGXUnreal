@@ -1,13 +1,13 @@
-// Copyright 2024, Algoryx Simulation AB.
+// Copyright 2025, Algoryx Simulation AB.
 
 #include "Sensors/RtShapeInstanceBarrier.h"
 
 // AGX Dynamics for Unreal includes.
+#include "BarrierOnly/AGXTypeConversions.h"
 #include "Sensors/RtLambertianOpaqueMaterialBarrier.h"
 #include "Sensors/RtShapeBarrier.h"
 #include "Sensors/SensorEnvironmentBarrier.h"
 #include "Sensors/SensorRef.h"
-#include "TypeConversions.h"
 
 // AGX Dynamics includes.
 #include "BeginAGXIncludes.h"
