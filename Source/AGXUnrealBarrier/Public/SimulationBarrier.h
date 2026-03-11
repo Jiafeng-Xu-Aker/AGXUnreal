@@ -1,4 +1,4 @@
-// Copyright 2025, Algoryx Simulation AB.
+// Copyright 2026, Algoryx Simulation AB.
 
 #pragma once
 
@@ -29,6 +29,7 @@ class FWireBarrier;
 class FAddedMassInteractionBarrier;
 class FWindAndWaterControllerBarrier;
 
+struct FCableBarrier;
 struct FObserverFrameBarrier;
 struct FRigidBodyBarrier;
 struct FShapeBarrier;
@@ -43,6 +44,7 @@ public:
 	FSimulationBarrier(FSimulationBarrier&& Other);
 	~FSimulationBarrier();
 
+	bool Add(FCableBarrier& Cable);
 	bool Add(FConstraintBarrier& Constraint);
 	bool Add(FContactMaterialBarrier& ContactMaterial);
 	bool Add(FObserverFrameBarrier& Frame);
@@ -64,6 +66,7 @@ public:
 	bool Add(FTrackBarrier& Track);
 	bool Add(FWireBarrier& Wire);
 	bool Add(FWindAndWaterControllerBarrier& WindAnWaterController);
+	bool Remove(FCableBarrier& Cable);
 	bool Add(FAddedMassInteractionBarrier& AddedMassInteractionbarrier);
 	bool Remove(FConstraintBarrier& Constraint);
 	bool Remove(FContactMaterialBarrier& ContactMaterial);
@@ -151,6 +154,9 @@ public:
 	/// management here is a bit misleading.
 	void SetStatisticsEnabled(bool bEnable);
 	FAGX_Statistics GetStatistics();
+
+	void EnableThreadTimeline();
+	bool DisableThreadTimeline(const FString& FileType);
 
 	bool HasNative() const;
 	void AllocateNative();
